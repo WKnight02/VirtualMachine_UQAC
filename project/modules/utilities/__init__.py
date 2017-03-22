@@ -1,1 +1,1 @@
-from .int16 import *
+from .intB import *

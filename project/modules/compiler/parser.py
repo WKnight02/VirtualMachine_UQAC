@@ -52,6 +52,9 @@ class parser():
 		
 	
 	def parse(self,text):
+	
+	
+		#adada 
 		ligne =0
 		#Separe les lignes de commande par ligne
 		commands = text.split("\n")

@@ -39,7 +39,7 @@ class parser():
 		"JMO":1,
 		"JMC":1,
 		#Autre
-		"NOP":0'
+		"NOP":0,
 		"HLT":0
 	}
 	def __init___(self,*args,**kargs):
@@ -67,17 +67,17 @@ class parser():
 			CleanCom = command
 			#Regarde si la commande contient plus de 3 parametre
 			try:
-				print(CleanCom[0])
-				if len(CleanCom[1:]) > self.operations[str(CleanCom[0])]:
-					#Ajoute une entree dans le tableau d erreur avec la ligne correspondante
-					self.Error.append("Ligne"+str(ligne)+": Trop d'argument")
-				elif len(CleanCom) !=0:
-					#Ajoute une commande au tableau Commandes
-					self.Commandes.append(CleanCom)
+				if len(CleanCom) != 0:
+					if len(CleanCom[1:]) != self.operations[str(CleanCom[0])]:
+						#Ajoute une entree dans le tableau d erreur avec la ligne correspondante
+						self.Error.append("Ligne"+str(ligne)+": Nombre d'argument incorrect")
+					elif len(CleanCom) !=0:
+						#Ajoute une commande au tableau Commandes
+						self.Commandes.append(CleanCom)
 			except:
 				self.Error.append("Ligne"+str(ligne)+": Operateur inconnue")
 
-Text = "ADD 2 3 \n NZ 3 \n \n ADD \n NOP"
+Text = "ADD 2 3 \n NZ 3 \n \n ADD \n NOP \n SUB 1 2 3"
 parses = parser()
 parses.parse(Text)
 print(parses.Commandes)

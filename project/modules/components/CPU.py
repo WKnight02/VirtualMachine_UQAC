@@ -9,6 +9,9 @@ class CPU(IComponent):
         super().__init__(bus)
         self.ALU = ALU()
 
+        # A B C D
+        self.REGISTERS = [0 for i in range(4)]
+
     def fetch(self):
         pass
 

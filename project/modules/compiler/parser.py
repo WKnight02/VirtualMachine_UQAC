@@ -39,7 +39,7 @@ class parser():
 		"JMO":1,
 		"JMC":1,
 		#Autre
-		"NOP":0,
+		"NOP":0'
 		"HLT":0
 	}
 	def __init___(self,*args,**kargs):

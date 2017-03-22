@@ -32,7 +32,8 @@ class Interface(tk.Tk):
 
 	# Internal function setting up the components/widgets
 	def create_widgets(this):
-
+		"""Cree la fenetre de l'interface
+		"""
 		# This is the main vertical layout (screen / buttons)
 		p = tk.PanedWindow(this, orient=tk.VERTICAL)
 

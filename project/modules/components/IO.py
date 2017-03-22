@@ -1,6 +1,6 @@
 # -*- coding:utf8 -*-
-from .IComponent import *
+from .MAPPED import *
 
-class IO(IComponent):
+class IO(MAPPED):
     """INPUT / OUTPUT"""
     pass

@@ -1,4 +1,5 @@
 from .IComponent import *
+from .MAPPED import *
 from .CLOCK import *
 from .CPU import *
 from .ALU import *

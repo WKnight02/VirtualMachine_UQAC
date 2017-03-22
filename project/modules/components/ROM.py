@@ -1,6 +1,15 @@
 # -*- coding:utf8 -*-
-from .IComponent import *
+from .MAPPED import *
 
-class ROM(IComponent):
+class ROM(MAPPED):
     """READ ONLY MEMORY"""
-    pass
+
+    def write(self, *args):
+        return
+
+    def load(self, binary):
+        size = len(binary)
+        if size > self.getSize():
+            raise ValueError('binary length is too big')
+        for pos in range(size):
+            self.map[pos] = binary[pos]

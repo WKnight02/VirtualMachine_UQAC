@@ -46,8 +46,8 @@ class intB(object):
 			offset = bits % self.bits
 			mask = (1 << offset) - 1
 			return intB(bits, self() >> start & mask)
-		elif item < self.bits and item < :
-			return intB(2, self() >> (item % self.bits) & 1)
+		#elif item < self.bits and item < :
+			#return intB(2, self() >> (item % self.bits) & 1)
 
 	# self + value
 	def __add__(self, value): return intB(self.bits, self() + value)

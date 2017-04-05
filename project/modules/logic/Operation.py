@@ -1,7 +1,7 @@
 # -*- coding:utf8 -*-
 import re
 
-class compilationError(Exception): pass
+class CompilationError(Exception): pass
 
 class Operation(object):
 
@@ -70,7 +70,7 @@ class Operation(object):
                         
                         p = re.compile('^".*"$')
                         if p.match(arg) is None: 
-                           raise compilationError("Argument incorrect")
+                           raise CompilationError("Argument incorrect")
                         else:
                             parsed = arg[1:-1]
                             for c in parsed:
@@ -116,15 +116,15 @@ class Operation(object):
                         return '%d %d' % (int1,int2)
 
                     except:
-                        raise compilationError('Argument non valide: Adresse attendu')
+                        raise CompilationError('Argument non valide: Adresse attendu')
                         return None
 
                 else :
-                    raise compilationError('Argument non valide: Registre attendu')
+                    raise CompilationError('Argument non valide: Registre attendu')
                     return None;
 
             else:
-                raise compilationError("Nombre d'argument incorrect")
+                raise CompilationError("Nombre d'argument incorrect")
                 return None;
 
         else:

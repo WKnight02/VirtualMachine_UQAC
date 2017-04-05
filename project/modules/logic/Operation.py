@@ -67,12 +67,18 @@ class Operation(object):
                     return '%d' % (parsed)
                 except:
                     try:
-                        parsed = arg[1:-1]
-                        for c in parsed:
-                            compiled.append(str(ord(c)))
-                        return ' '.join(compiled)
-                    except:
-                        raise compilationError("Erreur DTA")
+                        
+                        p = re.compile('^".*"$')
+                        if p.match(arg) is None: 
+                           raise compilationError("Argument incorrect")
+                        else:
+                            parsed = arg[1:-1]
+                            for c in parsed:
+                                compiled.append(str(ord(c)))
+                            return ' '.join(compiled)              
+
+                    except Exception as e:
+                        raise e
 
 
 

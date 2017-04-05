@@ -107,16 +107,16 @@ class CPU(IComponent):
 
         return decorator
 
-    @Managed('r', 'r', stored=1)
+    @Managed('r', 'r', store=1)
     def ADD(self, reg1, reg2): return reg1 + reg2
 
-    @Managed('r', 'r', stored=1)
+    @Managed('r', 'r', store=1)
     def SUB(self, reg1, reg2): return reg1 - reg2
 
-    @Managed('r', 'r', stored=1)
+    @Managed('r', 'r', store=1)
     def MUL(self, reg1, reg2): return reg1 * reg2
 
-    @Managed('r', 'r', stored=1)
+    @Managed('r', 'r', store=1)
     def DIV(self, reg1, reg2): return reg1 / reg2
 
     @Managed('a')

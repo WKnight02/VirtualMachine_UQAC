@@ -52,13 +52,13 @@ class CPU(IComponent):
         Also allows for fuzzy arguments conversion.
         Types:
          - r, reg, register
-         - a, adr, adress
+         - a, adr, address
          - v, val, value
         """
 
         TYPES = {
             'register': ('r', 'reg', 'register'),
-            'adress': ('a', 'adr', 'adress'),
+            'address': ('a', 'adr', 'address'),
             'value': ('v', 'val', 'value', None),
         }
 
@@ -77,7 +77,7 @@ class CPU(IComponent):
                     if T in TYPES['register']:
                         carg = self.getRegister(carg)
 
-                    elif T in TYPES['adress']:
+                    elif T in TYPES['address']:
                         carg = self.getShared(carg)
 
                     elif T not in TYPES['value']:

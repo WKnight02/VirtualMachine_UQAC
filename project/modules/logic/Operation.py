@@ -1,4 +1,5 @@
 # -*- coding:utf8 -*-
+import re
 
 class compilationError(Exception): pass
 
@@ -52,13 +53,34 @@ class Operation(object):
 
     @classmethod        
     def compile(cls, source):
-        command = source.split(" ")
+        command = source.split(" ")      
         while command.count(''): del command[command.index('')]
         if len(command) != 0:
+
+            if command[0] == "DTA":
+                arg = ' '.join(command[1:])
+                parsed = None
+                compiled =[]
+
+                try:
+                    parsed = int(arg)
+                    return '%d' % (parsed)
+                except:
+                    try:
+                        parsed = arg[1:-1]
+                        for c in parsed:
+                            compiled.append(str(ord(c)))
+                        return ' '.join(compiled)
+                    except:
+                        raise compilationError("Erreur DTA")
+
+
+
             Op = cls.DEFINED[str(command[0])]
             if len(command) == 1 and (command[0] == "NOP" or command[0] == "HLT")  :
-                return Op[0]
+                return '%d' % (Op[0])
             elif len(command[1:]) == len(Op)/2:
+
                 if Op[1] == 'reg' and command[1] in 'ABCD':   
 
                     if len(command)>2:

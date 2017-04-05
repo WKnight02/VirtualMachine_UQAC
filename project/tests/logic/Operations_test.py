@@ -11,11 +11,14 @@ class OperationTestCase(unittest.TestCase):
 		'EZ A': '13825',
 		'HLT': '3840',
 		'NOP': '0',
-		'XOR D A': '8964 1'
+		'XOR D A': '8964 1',
+        'DTA 64':'64',
+        'DTA "Salut toi"': '83 97 108 117 116 32 116 111 105' 
         }
 
     SOURCE_NOT_OK = [
 		'JMP A',
+        'DTA "salut" 64',
         'ADD 0x1234 0x4567',
         'SET 0x1234 A',
         'SET B B',

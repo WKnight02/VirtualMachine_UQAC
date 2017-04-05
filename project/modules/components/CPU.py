@@ -25,6 +25,10 @@ class CPU(IComponent):
             raise ValueError('Register at 0x%x is invalid' % reg)
         return self.REGISTERS[i]
 
+    def getShared(self, adr):
+        """Get data through the BUS"""
+        pass
+
     def fetch(self):
         pass
 

@@ -41,3 +41,17 @@ class BUS(IComponent):
     def writing(self, bool=False):
         if bool: self.MODE = 2
         return self.MODE == 2
+
+    def read(self, addr):
+        self.reading(True)
+        self.ADDR = addr
+        self.event()
+        self.waiting(True)
+        return self.DATA
+
+    def write(self, addr, data):
+        self.writing(True)
+        self.ADDR = addr
+        self.DATA = data
+        self.event()
+        self.waiting(True)

@@ -1,10 +1,15 @@
 # -*- coding:utf8 -*-
 from ..utilities import int16
+from ..logic.Operation import *
 from .IComponent import *
 from .ALU import *
 
 # Meh
 CPU_OPERATIONS = {}
+
+class CpuError(Exception): pass
+class DecodingError(CpuError): pass
+class ExecutionError(CpuError): pass
 
 class CPU(IComponent):
     """CENTRAL PROCESSING UNIT"""
@@ -14,6 +19,8 @@ class CPU(IComponent):
     STATE_CARRY = 2
     STATE_ZERO = 3
     STATE_CND = 4
+
+    OPERATION_LOOKUP = Operation.computeReverseLookup()
 
     def __init__(self, bus):
         super().__init__(bus)
@@ -56,10 +63,16 @@ class CPU(IComponent):
         pass
 
     def fetch(self):
-        pass
+        """Current instruction"""
+        self.IR = self.bus.read(self.PC)
+        self.PC += 1
 
     def decode(self):
-        pass
+        """Decoding OPCODE"""
+        opcode = self.IR & 0xFF00
+
+        if opcode not in self.OPERATION_LOOKUP:
+            raise DecodingError('Unknown opcode "%d"' % opcode)
 
     def execute(self):
         pass

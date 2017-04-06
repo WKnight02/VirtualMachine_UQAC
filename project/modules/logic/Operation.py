@@ -9,26 +9,26 @@ class Operation(object):
         'DTA':  (0, 'val'),
 
 
-        'SET':  (0x0500, 'reg', 0, 'val'),
-        'LD':   (0x0600, 'reg', 0, 'val'),
-        'ST':   (0x0700, 'reg', 0, 'adr'),
-        'MV':   (0x0800, 'reg', 0, 'reg'),
+        'SET':  (0x0500, 'reg', 'val'),
+        'LD':   (0x0600, 'reg', 'val'),
+        'ST':   (0x0700, 'reg', 'adr'),
+        'MV':   (0x0800, 'reg', 'reg'),
 
-        'ADD':  (0x1100, 'reg', 0, 'reg'),
-        'SUB':  (0x1200, 'reg', 0, 'reg'),
-        'MUL':  (0x1300, 'reg', 0, 'reg'),
-        'DIV':  (0x1400, 'reg', 0, 'reg'),
+        'ADD':  (0x1100, 'reg', 'reg'),
+        'SUB':  (0x1200, 'reg', 'reg'),
+        'MUL':  (0x1300, 'reg', 'reg'),
+        'DIV':  (0x1400, 'reg', 'reg'),
 
-        'OR':   (0x2100, 'reg', 0, 'reg'),
-        'AND':  (0x2200, 'reg', 0, 'reg'),
-        'XOR':  (0x2300, 'reg', 0, 'reg'),
+        'OR':   (0x2100, 'reg', 'reg'),
+        'AND':  (0x2200, 'reg', 'reg'),
+        'XOR':  (0x2300, 'reg', 'reg'),
         'NOT':  (0x2400, 'reg'),
 
-        'LT':   (0x3100, 'reg', 0, 'val'),
-        'GT':   (0x3200, 'reg', 0, 'val'),
-        'LE':   (0x3300, 'reg', 0, 'val'),
-        'GE':   (0x3400, 'reg', 0, 'val'),
-        'EQ':   (0x3500, 'reg', 0, 'val'),
+        'LT':   (0x3100, 'reg', 'val'),
+        'GT':   (0x3200, 'reg', 'val'),
+        'LE':   (0x3300, 'reg', 'val'),
+        'GE':   (0x3400, 'reg', 'val'),
+        'EQ':   (0x3500, 'reg', 'val'),
         'EZ':   (0x3600, 'reg'),
         'NZ':   (0x3700, 'reg'),
 
@@ -51,9 +51,16 @@ class Operation(object):
     def __init__(self, BASECODE, *args): pass
     # phew. need more thinkin.
 
-    @classmethod        
+    @classmethod
+    def computeReverseLookup(cls):
+        reverse = {}
+        for op, params in cls.DEFINED.items():
+            reverse[params[0]] = (op,) + params[1:]
+        return reverse
+
+    @classmethod
     def compile(cls, source):
-        command = source.split(" ")      
+        command = source.split(" ")
         while command.count(''): del command[command.index('')]
         if len(command) != 0:
             '''
@@ -71,13 +78,14 @@ class Operation(object):
                     try:
 
                         p = re.compile('^".*"$')
-                        if p.match(arg) is None: 
+                        if p.match(arg) is None:
                             raise CompilationError("Argument incorrect")
+
                         else:
                             parsed = arg[1:-1]
                             for c in parsed:
                                 compiled.append(str(ord(c)))
-                            return ' '.join(compiled)              
+                            return ' '.join(compiled)
 
                     except Exception as e:
                         raise e
@@ -92,20 +100,18 @@ class Operation(object):
             if len(command) == 1 and (command[0] == "NOP" or command[0] == "HLT")  :
                 return '%d' % (Op[0])
 
-            #Test Si l'operation a le bon nombre d'argument   
-            elif len(command[1:]) == len(Op)/2:
+            elif len(command[1:]) == len(Op)-1:
 
                 #Test si le premier argument attendu est bien le bon ici registre
-                if Op[1] == 'reg' and command[1] in 'ABCD':   
+                if Op[1] == 'reg' and command[1] in 'ABCD':
 
                     if len(command)>2:
-
-                        if Op[3] == 'reg' and command[2] in 'ABCD':
+                        if Op[2] == 'reg' and command[1] in 'ABCD':
                             int1 = Op[0]+cls.REGISTER[str(command[1])]
                             int2 = 0x0000 + cls.REGISTER[str(command[2])]
-                            return '%d %d' % (int1,int2)     
+                            return '%d %d' % (int1,int2)
 
-                        elif Op[3] == 'adr' or Op[3] == 'val':
+                        elif Op[2] == 'adr' or Op[2] == 'val':
                             try:
                                 int2 = int(command[2],0)
                                 int1 = Op[0]+cls.REGISTER[str(command[1])]
@@ -120,7 +126,7 @@ class Operation(object):
                         int1 = Op[0]+cls.REGISTER[str(command[1])]
                         return '%d' % (int1)
 
-                #Test si le premier argument attendu est bien le bon ici une adresse       
+                #Test si le premier argument attendu est bien le bon ici une adresse
                 elif Op[1] == 'adr':
                     try:
                         int1 = Op[0]
@@ -136,8 +142,6 @@ class Operation(object):
 
             else:
                 raise CompilationError("Nombre d'argument incorrect")
-				
+
         else:
             return '';
-   
-

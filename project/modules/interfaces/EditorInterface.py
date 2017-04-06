@@ -3,7 +3,7 @@ The editor's interface
 """
 import tkinter as tk
 from tkinter import filedialog
-from ....project import Compiler
+from .. import Compiler
 
 __all__ = ['Interface']
 
@@ -106,14 +106,15 @@ class Interface(tk.Tk):
 			this.Input.see(tk.END)
 			
 			
-	def Compile(this):options = {}
+	def Compile(this):
+		options = {}
 		options['defaultextension'] = '.txt'
 		options['filetypes'] = [('TeamPouleCompiled', '.tpc')]
 		options['initialdir'] = '~/'
 		options['initialfile'] = 'Compiled.tpc'
 		options['parent'] = this
 		options['title'] = 'Sauvegarder'
-		filename = filedialog.askopenfilename(**options)
+		filename = filedialog.asksaveasfilename(**options)
 		if filename:
 			text = open(filename, 'w')
 			Lines = this.Input.get("1.0",tk.END)

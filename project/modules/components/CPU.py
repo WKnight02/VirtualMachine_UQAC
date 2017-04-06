@@ -3,14 +3,17 @@ from ..utilities import int16
 from .IComponent import *
 from .ALU import *
 
+# Meh
+CPU_OPERATIONS = {}
+
 class CPU(IComponent):
     """CENTRAL PROCESSING UNIT"""
 
-    STATUS_PARITY = 0
-    STATUS_SIGN = 1
-    STATUS_CARRY = 2
-    STATUS_ZERO = 3
-    STATUS_CND = 4
+    STATE_PARITY = 0
+    STATE_SIGN = 1
+    STATE_CARRY = 2
+    STATE_ZERO = 3
+    STATE_CND = 4
 
     def __init__(self, bus):
         super().__init__(bus)
@@ -24,11 +27,11 @@ class CPU(IComponent):
         self.PC = 0
         self.IR = 0
 
-    def getStatusBit(self, bit):
-        return int16.BitGet(self.STATUS, bit)
+    def getStateBit(self, bit):
+        return int16.BitGet(self.STATE, bit)
 
-    def setStatusBit(self, bit, val):
-        self.STATUS = int16.BitSet(self.STATUS, bit, val)
+    def setStateBit(self, bit, val):
+        self.STATE = int16.BitSet(self.STATE, bit, val)
         return self
 
     def getRegister(self, reg):
@@ -72,7 +75,8 @@ class CPU(IComponent):
         try:
             return getattr(self, method.upper())
         except AttributeError: # Empty function
-            return lambda *args, **kargs: None
+            pass
+        return lambda *args, **kargs: None
 
     def Managed(*types, store=None, status=None):
         """This ensure each function affects correctly the different CPU registers.
@@ -89,7 +93,7 @@ class CPU(IComponent):
             'value': ('v', 'val', 'value', None),
         }
 
-        def decorator(func):
+        def decorator(method):
             """The actual decorator"""
 
             def modified(self, *args):
@@ -116,34 +120,36 @@ class CPU(IComponent):
                 cargs += args[i+1:]
 
                 # Call with converted args the function
-                value = func(*cargs)
-
-                # Check for parity
-                parity = int16.BitGet(0)
-                self.setStatusBit(self.STATUS_PARITY, parity)
+                value = method(self, *cargs)
 
                 # Check sign
                 sign = 0
                 if value < 0:
                     value = abs(value)
                     sign = 1
-                self.setStatusBit(self.STATUS_CARRY, sign)
+                self.setStateBit(self.STATE_CARRY, sign)
 
                 # Check for overflow
                 overflow, cleanValue = int16.Overflow(value)
-                self.setStatusBit(self.STATUS_CARRY, int(overflow))
+                self.setStateBit(self.STATE_CARRY, int(overflow))
+
+                # Check for parity
+                parity = int16.BitGet(cleanValue, 0)
+                self.setStateBit(self.STATE_PARITY, parity)
 
                 if status is not None:
-                    self.setStatusBit(status, cleanValue)
+                    self.setStateBit(status, cleanValue)
 
                 if store is not None:
-                    i = stored - 1
+                    i = store - 1
                     if types[i] not in TYPES['register']:
                         raise TypeError("Can't store your shit")
                     self.setRegister(args[i], cleanValue)
 
                 return value
 
+            # Enregistrement de la fonction modifiée
+            CPU_OPERATIONS[method.__name__] = method
             return modified
 
         return decorator
@@ -166,25 +172,25 @@ class CPU(IComponent):
     ###
     # Comparisons
 
-    @Managed('r', 'r', status=STATUS_CND)
+    @Managed('r', 'r', status=STATE_CND)
     def LT(self, reg1, reg2): return int(reg1 < reg2)
 
-    @Managed('r', 'r', status=STATUS_CND)
+    @Managed('r', 'r', status=STATE_CND)
     def GT(self, reg1, reg2): return int(reg1 > reg2)
 
-    @Managed('r', 'r', status=STATUS_CND)
+    @Managed('r', 'r', status=STATE_CND)
     def LE(self, reg1, reg2): return int(reg1 <= reg2)
 
-    @Managed('r', 'r', status=STATUS_CND)
+    @Managed('r', 'r', status=STATE_CND)
     def GE(self, reg1, reg2): return int(reg1 >= reg2)
 
-    @Managed('r', 'r', status=STATUS_CND)
+    @Managed('r', 'r', status=STATE_CND)
     def EQ(self, reg1, reg2): return int(reg1 == reg2)
 
-    @Managed('r', status=STATUS_CND)
+    @Managed('r', status=STATE_CND)
     def EZ(self, reg1): return int(reg1 == 0)
 
-    @Managed('r', status=STATUS_CND)
+    @Managed('r', status=STATE_CND)
     def NZ(self, reg1): return int(reg1 != 0)
 
     ###
@@ -227,19 +233,19 @@ class CPU(IComponent):
 
     @Managed('a')
     def JMZ(self, adr):
-        if self.getStatusBit(self.STATUS_ZERO):
+        if self.getStateBit(self.STATE_ZERO):
             self.IR = adr
         return adr
 
     @Managed('a')
     def JMO(self, adr):
-        if self.getStatusBit(self.STATUS_CARRY):
+        if self.getStateBit(self.STATE_CARRY):
             self.IR = adr
         return adr
 
     @Managed('a')
     def JMC(self, adr):
-        if self.getStatusBit(self.STATUS_CND):
+        if self.getStateBit(self.STATE_CND):
             self.IR = adr
         return adr
 

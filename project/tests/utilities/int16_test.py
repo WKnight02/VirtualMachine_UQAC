@@ -29,10 +29,22 @@ class int16TestCase(unittest.TestCase):
             self.assertEqual(int16.BitGet(n, i), bn[i], i)
 
         # Expected modified results after bit setting
-        for i in range(len(n)):
+        for i in range(8):
             for v in (0, 1):
                 self.assertEqual(
-                    int16.BitGet(int16.BitSet(i, v), i),
+                    int16.BitGet(int16.BitSet(n, i, v), i),
                     v,
                     (i, v)
                 )
+
+    def test_inverse(self):
+
+        # inputs / outputs
+        io = (
+            (int16.MAX - 1, 0),
+            (0, int16.MAX - 1),
+            (0b1111000011110000, 0b0000111100001111)
+        )
+
+        for input, output in io:
+            self.assertEqual(int16.Inverse(input), output, input)

@@ -8,7 +8,7 @@ def Overflow(n):
 
 def BitGet(n, bit):
     mask = 1 << bit
-    return n & mask
+    return 1 if n & mask else 0
 
 def BitSet(n, bit, val):
     mask = 1 << bit

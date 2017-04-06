@@ -1,7 +1,7 @@
 # -*- coding:utf8 -*-
-from ..Utilities import int16
+from ..utilities import int16
 from .IComponent import *
-from .ALU import
+from .ALU import *
 
 class CPU(IComponent):
     """CENTRAL PROCESSING UNIT"""

@@ -4,7 +4,7 @@ MAX = 1<<16
 MIN = 0
 
 def Overflow(n):
-    return (n > MAX, n % MAX)
+    return (n >= MAX, n % MAX)
 
 def BitGet(n, bit):
     mask = 1 << bit

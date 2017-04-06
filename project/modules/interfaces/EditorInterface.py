@@ -69,7 +69,7 @@ class Interface(tk.Tk):
 	
 	#Save a FILE
 	def SaveFile(this):
-		"""Enregistre un fichier txt avec le code rentre dans l editeur
+		"""Enregistre un fichier txt avec le code dans l editeur
 		"""
 		options = {}
 		options['defaultextension'] = '.txt'

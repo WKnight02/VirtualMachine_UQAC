@@ -4,11 +4,15 @@ from .logic.Operation import *
 def CompileProgram(commands):
 		try:
 			lineCompile = ''
+			line = 0;
 			for command in commands:
-				lineCompile += Operation.compile(command)+"\n"
-			return lineCompile
+				line +=1
+				resultat = Operation.compile(command)
+				if (resultat != ''):
+					lineCompile += resultat+"\n"
+			return (lineCompile,'') 
 		except Exception as e:
-			print(e)
+			return ('',str(e)+"\n A la ligne : "+str(line))
 
 
 	

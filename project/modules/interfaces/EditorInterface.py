@@ -54,8 +54,8 @@ class Interface(tk.Tk):
 		this.Input = textEditor = tk.Text(p, background='white')
 
 		#Cree la zone d affichage
-		textResultat = tk.Text(p, background='white')
-		textResultat.config(state=tk.DISABLED)
+		this.resultat = textResultat = tk.Text(p, background='white')
+		this.resultat.config(state=tk.DISABLED)
 		
 		# Packing
 		textEditor.pack(side=tk.RIGHT, fill=tk.Y)
@@ -107,22 +107,35 @@ class Interface(tk.Tk):
 			
 			
 	def Compile(this):
-		options = {}
-		options['defaultextension'] = '.txt'
-		options['filetypes'] = [('TeamPouleCompiled', '.tpc')]
-		options['initialdir'] = '~/'
-		options['initialfile'] = 'Compiled.tpc'
-		options['parent'] = this
-		options['title'] = 'Sauvegarder'
-		filename = filedialog.asksaveasfilename(**options)
-		if filename:
-			text = open(filename, 'w')
-			Lines = this.Input.get("1.0",tk.END)
-			compiled = Compiler.CompileProgram(Lines)
-			text.write(compiled)
-			text.close()
+
+		Lines = this.Input.get("1.0",tk.END)
+		SplitLines = Lines.split("\n")
+		compiled, erreur = Compiler.CompileProgram(SplitLines)
+		if compiled != '':
+			options = {}
+			options['defaultextension'] = '.txt'
+			options['filetypes'] = [('TeamPouleCompiled', '.tpc')]
+			options['initialdir'] = '~/'
+			options['initialfile'] = 'Compiled.tpc'
+			options['parent'] = this
+			options['title'] = 'Sauvegarder'
+			filename = filedialog.asksaveasfilename(**options)
+			if filename:
+				this.ShowResultCompile("Compilation reussi avec succes")
+				text = open(filename, 'w')
+				text.write(compiled)
+				text.close()				
+		else:
+			text = "Erreur de compilation :\n"+erreur
+			this.ShowResultCompile(text)
+
+
 		
-		
+	def ShowResultCompile(this,text):
+		this.resultat.config(state=tk.NORMAL)
+		this.resultat.delete("1.0",tk.END)
+		this.resultat.insert("1.0",text)
+		this.resultat.config(state=tk.DISABLED)	
 		
 		
 		

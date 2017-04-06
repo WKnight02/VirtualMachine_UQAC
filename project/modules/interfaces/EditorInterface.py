@@ -3,6 +3,7 @@ The editor's interface
 """
 import tkinter as tk
 from tkinter import filedialog
+from ....project import Compiler
 
 __all__ = ['Interface']
 
@@ -46,7 +47,7 @@ class Interface(tk.Tk):
 		SaveButton = tk.Button(MenuButtons, text="Sauvegarder", command=this.SaveFile)
 		SaveButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
 		
-		CompileButton = tk.Button(MenuButtons, text="Compiler")
+		CompileButton = tk.Button(MenuButtons, text="Compiler", command=this.Compile)
 		CompileButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
 		
 		# Cree la zone d'edition
@@ -103,4 +104,29 @@ class Interface(tk.Tk):
 			this.Input.delete("1.0",tk.END)
 			this.Input.insert(tk.END, data)
 			this.Input.see(tk.END)
+			
+			
+	def Compile(this):options = {}
+		options['defaultextension'] = '.txt'
+		options['filetypes'] = [('TeamPouleCompiled', '.tpc')]
+		options['initialdir'] = '~/'
+		options['initialfile'] = 'Compiled.tpc'
+		options['parent'] = this
+		options['title'] = 'Sauvegarder'
+		filename = filedialog.askopenfilename(**options)
+		if filename:
+			text = open(filename, 'w')
+			Lines = this.Input.get("1.0",tk.END)
+			compiled = Compiler.CompileProgram(Lines)
+			text.write(compiled)
+			text.close()
+		
+		
+		
+		
+		
+		
+		
+		
+		
 			

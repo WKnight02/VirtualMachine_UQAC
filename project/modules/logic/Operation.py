@@ -106,7 +106,7 @@ class Operation(object):
                 if Op[1] == 'reg' and command[1] in 'ABCD':
 
                     if len(command)>2:
-                        if Op[2] == 'reg' and command[1] in 'ABCD':
+                        if Op[2] == 'reg' and command[2] in 'ABCD':
                             int1 = Op[0]+cls.REGISTER[str(command[1])]
                             int2 = 0x0000 + cls.REGISTER[str(command[2])]
                             return '%d %d' % (int1,int2)

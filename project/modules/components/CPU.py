@@ -56,31 +56,56 @@ class CPU(IComponent):
 
     def getShared(self, adr):
         """Get data through the BUS"""
-        pass
+        return self.bus.read(adr)
 
     def setShared(self, adr, val):
         """Set data through the BUS"""
-        pass
+        return self.bus.write(adr, val)
 
     def fetch(self):
         """Current instruction"""
-        self.IR = self.bus.read(self.PC)
-        self.PC += 1
+        self.IR = self.getShared(self.PC)
+        return self.IR
 
     def decode(self):
         """Decoding OPCODE"""
         opcode = self.IR & 0xFF00
 
         if opcode not in self.OPERATION_LOOKUP:
-            raise DecodingError('Unknown opcode "%d"' % opcode)
+            raise DecodingError('Unknown opcode "%d" at [%x]' % (opcode, self.PC))
+        self.PC += 1
 
-    def execute(self):
-        pass
+        operation, params = self.OPERATION_LOOKUP[opcode]
+        psize = len(params)
+        decoded = []
+
+        # Instruction doesnt require parameters
+        if psize == 0:
+            pass
+
+        # Instruction has at least one operator
+        elif psize >= 1:
+
+            if params[0] == 'reg':
+                decoded.append(self.IR & 0x00FF)
+
+            elif params[0] == 'adr':
+                decoded.append(self.fetch())
+                self.PC += 1
+
+            if psize == 2:
+                decoded.append(self.fetch())
+                self.PC += 1
+
+        return operation, decoded
+
+    def execute(self, operation, args):
+        return self.invoke(operation)(*args)
 
     def clock(self):
         self.fetch()
-        self.decode()
-        self.execute()
+        operation, args = self.decode()
+        self.execute(operation, args)
 
     # MEGA DEF OF DOOM
     def invoke(self, method):

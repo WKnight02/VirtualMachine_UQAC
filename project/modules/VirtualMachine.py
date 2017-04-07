@@ -1,4 +1,6 @@
 # -*- coding:utf8 -*-
+from . import Compiler
+
 from .components import *
 
 class VirtualMachine(object):
@@ -11,9 +13,22 @@ class VirtualMachine(object):
         self.ram = RAM(bus).rangemap(32768, 65535)
         self.io = IO(bus).rangemap(16636, 32767)
 
-    def loadProgram(self, binary):
-        self.rom.load(binary)
+    def loadProgram(self, integers):
+        self.rom.load(integers)
+
+    def loadPseudoCompiledProgram(self, programLines):
+        """This directly maps each value into the ROM"""
+
+        # Hackyhacky callback
+        def fetcher(value):
+            fetcher.rom.override(fetcher.i, value)
+            fetcher.i += 1
+        fetcher.rom = self.rom
+        fetcher.i = 0
+
+        Compiler.ParsePseudoCompiledProgram(programLines, fetcher)
 
     def run(self):
+        """Starts the clock event thread and starts the cycles"""
         self.clock.run()
         self.clock.start()

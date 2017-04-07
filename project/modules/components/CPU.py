@@ -75,7 +75,7 @@ class CPU(IComponent):
             raise DecodingError('Unknown opcode "%d" at [%x]' % (opcode, self.PC))
         self.PC += 1
 
-        operation, params = self.OPERATION_LOOKUP[opcode]
+        operation, *params = self.OPERATION_LOOKUP[opcode]
         psize = len(params)
         decoded = []
 
@@ -106,6 +106,7 @@ class CPU(IComponent):
         self.fetch()
         operation, args = self.decode()
         self.execute(operation, args)
+        return self
 
     # MEGA DEF OF DOOM
     def invoke(self, method):

@@ -31,3 +31,14 @@ def ParsePseudoCompiledProgram(programLines, callback=lambda x:x):
 		for value in line.split(' '):
 			if value.strip() == '': continue
 			callback(int(value))
+
+def ParseTextProgramAsInt(programLines):
+	"""As I'm looking for things kinda memory-efficient, this function is
+	actually a generator, and allows to maybe not store the whole programLines
+	but rather return each integers one by one"""
+
+	for line in programLines:
+		if line.strip() == '': continue
+		for value in line.split(' '):
+			if value.strip() == '': continue
+			yield int(value)

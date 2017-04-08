@@ -18,15 +18,7 @@ class VirtualMachine(object):
 
     def loadPseudoCompiledProgram(self, programLines):
         """This directly maps each value into the ROM"""
-
-        # Hackyhacky callback
-        def fetcher(value):
-            fetcher.rom.override(fetcher.i, value)
-            fetcher.i += 1
-        fetcher.rom = self.rom
-        fetcher.i = 0
-
-        Compiler.ParsePseudoCompiledProgram(programLines, fetcher)
+        self.loadProgram(Compiler.ParseTextProgramAsInt(programLines))
 
     def run(self):
         """Starts the clock event thread and starts the cycles"""

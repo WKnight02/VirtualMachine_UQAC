@@ -8,11 +8,22 @@ class ROM(MAPPED):
         return
 
     def load(self, binary):
-        size = len(binary)
-        if size > self.getSize():
-            raise ValueError('binary length is too big')
-        for pos in range(size):
-            self.map[pos] = binary[pos]
+
+        selfSize = self.getSize()
+
+        try:
+            size = len(binary)
+            if size > selfSize:
+                raise ValueError('Data length is too big [%d > %d]' % (size, selfSize))
+        except:
+            pass
+
+        pos = 0
+        for data in binary:
+            if pos >= selfSize:
+                raise OutOfMemoryException('ROM ran out of memory while loading data [%d]' % selfSize)
+            self.map[pos] = data
+            pos += 1
 
     def override(self, *args):
         """This function gives access to 'write'"""

@@ -4,10 +4,11 @@ The editor's interface
 import tkinter as tk
 from tkinter import filedialog
 from .. import Compiler
+from .ControlerInterface import ControlerInterface
 
-__all__ = ['Interface']
+__all__ = ['EditorInterface']
 
-class Interface(tk.Tk):
+class EditorInterface(tk.Tk):
 	"""Editor's interface
 	"""
 
@@ -124,7 +125,10 @@ class Interface(tk.Tk):
 				this.ShowResultCompile("Compilation reussi avec succes")
 				text = open(filename, 'w')
 				text.write(compiled)
-				text.close()				
+				text.close()
+			root = ControlerInterface()
+			root.title("controler")
+			root.mainloop()
 		else:
 			text = "Erreur de compilation :\n"+erreur
 			this.ShowResultCompile(text)

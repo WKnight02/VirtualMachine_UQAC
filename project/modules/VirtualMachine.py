@@ -15,7 +15,7 @@ class VirtualMachine(object):
         self.cpu = CPU(bus)
         self.rom = ROM(bus).rangemap(0, 16635)
         self.ram = RAM(bus).rangemap(32768, 65535)
-        self.term = TERM(bus).rangemap(16636, 32767)
+        self.term = TERM(bus).sizemap(16636, 2000)
 
     def createUI(self):
         self.window = root = tk.Tk()

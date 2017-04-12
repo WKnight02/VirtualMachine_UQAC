@@ -45,3 +45,6 @@ class CLOCK(IComponent):
 
     def kill(self):
         self.KILL = True
+
+    def isRunning(self):
+        return self.PROCESS is not None

@@ -11,7 +11,6 @@ class TermInterface(tk.Frame):
     """
 
     def __init__(self, root, height, width, *args, **kargs):
-        """PUTE"""
         super().__init__(root, *args, **kargs)
         self.height = height
         self.width = width

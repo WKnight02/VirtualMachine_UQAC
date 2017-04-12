@@ -1,7 +1,7 @@
 # -*- coding:utf8 -*-
 from .MAPPED import *
 
-from ..interfaces import TermInterface
+from ..interfaces.TermInterface import *
 
 class TERM(MAPPED):
     """INPUT / OUTPUT"""

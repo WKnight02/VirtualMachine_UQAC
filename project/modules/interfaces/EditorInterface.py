@@ -3,10 +3,10 @@ The editor's interface
 """
 import tkinter as tk
 from tkinter import filedialog
-from .. import Compiler
-from .. import VirtualMachine
-from .ControllerInterface import ControllerInterface
 from multiprocessing import Process
+
+from .. import VirtualMachine as VMmod
+from .. import Compiler
 
 __all__ = ['EditorInterface']
 
@@ -23,7 +23,7 @@ class EditorInterface(tk.Tk):
 		"""You must provide a Core to actually process the inputs in a fashioned way. (see: bin.calcCore)
 		"""
 		super().__init__()
-		
+
 		this.buttons = {}
 
 		# Sets the size of the interface
@@ -44,37 +44,37 @@ class EditorInterface(tk.Tk):
 
 		#Cree les bouttons enregistrer et charger
 		MenuButtons = tk.Frame(this, borderwidth=2, relief=tk.GROOVE)
-		
+
 		LoadButton = tk.Button(MenuButtons, text="Ouvrir", command=this.OpenFile)
 		LoadButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
-		
+
 		SaveButton = tk.Button(MenuButtons, text="Sauvegarder", command=this.SaveFile)
 		SaveButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
-		
+
 		CompileButton = tk.Button(MenuButtons, text="Compiler", command=this.Compile)
 		CompileButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
 
 		ExecuteButton = tk.Button(MenuButtons, text="Executer", command=this.Execute)
 		ExecuteButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
-		
+
 		# Cree la zone d'edition
 		this.Input = textEditor = tk.Text(p, background='white')
 
 		#Cree la zone d affichage
 		this.resultat = textResultat = tk.Text(p, background='white')
 		this.resultat.config(state=tk.DISABLED)
-		
+
 		# Packing
 		textEditor.pack(side=tk.RIGHT, fill=tk.Y)
 		textResultat.pack(side=tk.RIGHT, fill=tk.Y)
-		
-		
+
+
 		# Display
 		p.add(MenuButtons)
 		p.add(textEditor)
 		p.add(textResultat)
 		p.pack(side=tk.TOP, expand=tk.Y, fill=tk.BOTH, pady=5, padx=5)
-	
+
 	#Save a FILE
 	def SaveFile(this):
 		"""Enregistre un fichier txt avec le code dans l editeur
@@ -92,7 +92,7 @@ class EditorInterface(tk.Tk):
 			data = this.Input.get("1.0",tk.END)
 			text.write(data)
 			text.close()
-	
+
 	def OpenFile(this):
 		"""Ouvre un fichier txt
 		"""
@@ -111,8 +111,8 @@ class EditorInterface(tk.Tk):
 			this.Input.delete("1.0",tk.END)
 			this.Input.insert(tk.END, data)
 			this.Input.see(tk.END)
-			
-			
+
+
 	def Compile(this):
 
 		Lines = this.Input.get("1.0",tk.END)
@@ -137,14 +137,14 @@ class EditorInterface(tk.Tk):
 			this.ShowResultCompile(text)
 
 
-		
+
 	def ShowResultCompile(this,text):
 		this.resultat.config(state=tk.NORMAL)
 		this.resultat.delete("1.0",tk.END)
 		this.resultat.insert("1.0",text)
-		this.resultat.config(state=tk.DISABLED)	
-		
-	def Execute(this) : 
+		this.resultat.config(state=tk.DISABLED)
+
+	def Execute(this) :
 		options = {}
 		options['defaultextension'] = '.tpc'
 		options['filetypes'] = [('TeamPouleCompiled', '.tpc')]
@@ -153,16 +153,9 @@ class EditorInterface(tk.Tk):
 		options['parent'] = this
 		options['title'] = 'Ouvrir'
 		filename = filedialog.askopenfilename(**options)
+
 		if filename:
 			text = open(filename, 'r')
-			vm = VirtualMachine.VirtualMachine()
-			vm.run
+			vm = VMmod.VirtualMachine()
+			vm.run()
 			text.close()
-	
-		
-		
-		
-		
-		
-		
-			

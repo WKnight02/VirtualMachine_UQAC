@@ -3,7 +3,6 @@ The Controller's interface
 """
 import tkinter as tk
 from tkinter import filedialog
-from .. import Compiler
 
 __all__ = ['ControllerInterface']
 
@@ -18,10 +17,10 @@ class ControllerInterface(tk.Tk):
 
 	def __init__(this, *args, **kargs):
 		"""
-		
+
 		"""
 		super().__init__()
-		
+
 		this.buttons = {}
 		# Sets the size of the interface
 		this.height = kargs.get("height", this.DEFAULTS["height"])
@@ -43,7 +42,7 @@ class ControllerInterface(tk.Tk):
 		MenuButtons = tk.Frame(this, borderwidth=2, relief=tk.GROOVE)
 		this.PlayButton = PlayButton = tk.Button(MenuButtons, text="Play", command=this.Run)
 		PlayButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
-		
+
 		ClockMode = tk.Button(MenuButtons, text="1 cycle")
 		ClockMode.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
 		champ_label = tk.Label(p, text="Modifier la vitesse:")
@@ -51,7 +50,7 @@ class ControllerInterface(tk.Tk):
 		w = tk.Scale(p, from_=10, to=1, orient=tk.HORIZONTAL)
 		w.set(5)
 		w.pack()
-		
+
 		# Display
 		p.add(MenuButtons)
 		p.add(champ_label)
@@ -61,18 +60,3 @@ class ControllerInterface(tk.Tk):
 	def Run(this):
 		this.PlayButton.config(text="Pause")
 		print("Run")
-
-	
-			
-
-			
-
-
-
-		
-		
-		
-		
-		
-		
-			

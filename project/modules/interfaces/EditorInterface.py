@@ -4,7 +4,9 @@ The editor's interface
 import tkinter as tk
 from tkinter import filedialog
 from .. import Compiler
-from .ControlerInterface import ControlerInterface
+from .. import VirtualMachine
+from .ControllerInterface import ControllerInterface
+from multiprocessing import Process
 
 __all__ = ['EditorInterface']
 
@@ -50,6 +52,9 @@ class EditorInterface(tk.Tk):
 		
 		CompileButton = tk.Button(MenuButtons, text="Compiler", command=this.Compile)
 		CompileButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
+
+		ExecuteButton = tk.Button(MenuButtons, text="Executer", command=this.Execute)
+		ExecuteButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
 		
 		# Cree la zone d'edition
 		this.Input = textEditor = tk.Text(p, background='white')
@@ -126,9 +131,6 @@ class EditorInterface(tk.Tk):
 				text = open(filename, 'w')
 				text.write(compiled)
 				text.close()
-			root = ControlerInterface()
-			root.title("controler")
-			root.mainloop()
 		else:
 			text = "Erreur de compilation :\n"+erreur
 			this.ShowResultCompile(text)
@@ -140,6 +142,22 @@ class EditorInterface(tk.Tk):
 		this.resultat.delete("1.0",tk.END)
 		this.resultat.insert("1.0",text)
 		this.resultat.config(state=tk.DISABLED)	
+		
+	def Execute(this) : 
+		options = {}
+		options['defaultextension'] = '.tpc'
+		options['filetypes'] = [('TeamPouleCompiled', '.tpc')]
+		options['initialdir'] = '~/'
+		options['initialfile'] = 'compiled.tpc'
+		options['parent'] = this
+		options['title'] = 'Ouvrir'
+		filename = filedialog.askopenfilename(**options)
+		if filename:
+			text = open(filename, 'r')
+			vm = VirtualMachine.VirtualMachine()
+			Process(target=vm.run).start()
+			text.close()
+
 		
 		
 		

@@ -2,6 +2,9 @@
 from . import Compiler
 
 from .components import *
+from .interfaces import ControllerInterface
+
+__all__ = ["VirtualMachine"]
 
 class VirtualMachine(object):
     def __init__(self):
@@ -12,6 +15,7 @@ class VirtualMachine(object):
         self.rom = ROM(bus).rangemap(0, 16635)
         self.ram = RAM(bus).rangemap(32768, 65535)
         self.io = IO(bus).rangemap(16636, 32767)
+        self.controller = ControllerInterface()
 
     def loadProgram(self, integers):
         self.rom.load(integers)

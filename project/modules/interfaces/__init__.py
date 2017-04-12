@@ -1,2 +1,2 @@
 from .EditorInterface import EditorInterface
-from .ControlerInterface import ControlerInterface
+from .ControllerInterface import ControllerInterface

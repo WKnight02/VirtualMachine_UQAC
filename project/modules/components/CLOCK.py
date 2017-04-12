@@ -49,3 +49,22 @@ class CLOCK(IComponent):
 
     def isRunning(self):
         return self.THREAD is not None
+
+    def createUI(self, root, *args, **kargs):
+        self.ui = ui = ControllerInterface(root, *args, **kargs)
+        """
+        ui.setTickInterval = lambda event: self.setTickInterval(event.value)
+
+        def temp(x, y):
+            do_thing()
+            return x
+
+        ui.play = temp
+
+        def temp(lol):
+            return lol
+
+        ui.pause = temp
+        """
+
+        return ui

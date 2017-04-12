@@ -22,11 +22,18 @@ class ControllerInterface(tk.Tk):
 		super().__init__()
 
 		this.buttons = {}
+
 		# Sets the size of the interface
 		this.height = kargs.get("height", this.DEFAULTS["height"])
 		this.width = kargs.get("width", this.DEFAULTS["width"])
+
 		this.resizable(width=False, height=False)
 		this.geometry("%dx%d" % (this.width, this.height))
+
+		this.setTickInterval = lambda *args: None
+		this.pause = lambda *args: None
+		this.play = lambda *args: None
+		this.tick = lambda *args: None
 
 		this.create_widgets()
 

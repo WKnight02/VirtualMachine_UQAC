@@ -33,6 +33,7 @@ class EditorInterface(tk.Tk):
 		this.geometry("%dx%d" % (this.width, this.height))
 
 		this.create_widgets()
+		print("J")
 
 	# Internal function setting up the components/widgets
 	def create_widgets(this):
@@ -155,10 +156,9 @@ class EditorInterface(tk.Tk):
 		if filename:
 			text = open(filename, 'r')
 			vm = VirtualMachine.VirtualMachine()
-			Process(target=vm.run).start()
+			vm.run
 			text.close()
-
-		
+	
 		
 		
 		

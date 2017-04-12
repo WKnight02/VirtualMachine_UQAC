@@ -1,5 +1,6 @@
 # -*- coding:utf8 -*-
 from multiprocessing import Process
+from threading import Thread
 from time import sleep
 
 from .IComponent import *
@@ -14,7 +15,7 @@ class CLOCK(IComponent):
         self.stop()
 
         self.KILL = False
-        self.PROCESS = None
+        self.THREAD = None
 
     def setTickInterval(self, tick_interval):
         self.TICK_INTERVAL = tick_interval
@@ -28,13 +29,13 @@ class CLOCK(IComponent):
                 self.tick()
             sleep(self.TICK_INTERVAL / 1000)
         self.KILL = False
-        self.PROCESS = None
+        self.THREAD = None
 
     def run(self):
-        if self.PROCESS is None:
-            self.PROCESS = Process(target=self.mainloop)
-            self.PROCESS.start()
-        return self.PROCESS
+        if self.THREAD is None:
+            self.THREAD = Thread(target=self.mainloop)
+            self.THREAD.start()
+        return self.THREAD
 
     def start(self):
         self.TICKING = True
@@ -47,4 +48,4 @@ class CLOCK(IComponent):
         self.KILL = True
 
     def isRunning(self):
-        return self.PROCESS is not None
+        return self.THREAD is not None

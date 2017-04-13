@@ -8,6 +8,18 @@ from .interfaces import ControllerInterface
 __all__ = ['VirtualMachine']
 
 class VirtualMachine(object):
+
+    @classmethod
+    def SpawnAndExecute(cls, file):
+        VM = cls()
+
+        with open(file, 'r') as f:
+            VM.loadPseudoCompiledProgram(f)
+        ui = VM.createUI()
+
+        VM.run()
+        ui.mainloop()
+
     def __init__(self):
         self.bus = bus = BUS()
 
@@ -19,8 +31,17 @@ class VirtualMachine(object):
 
     def createUI(self):
         self.window = root = tk.Tk()
+
+        def onClose(*args):
+            self.clock.kill()
+            root.destroy()
+        root.protocol('WM_DELETE_WINDOW', onClose)
+        root.bind('<Escape>', onClose)
+
         termUI = self.term.createUI(root)
         termUI.pack()
+
+        return root
 
     def loadProgram(self, integers):
         self.rom.load(integers)
@@ -31,6 +52,13 @@ class VirtualMachine(object):
 
     def run(self):
         """Starts the clock event thread and starts the cycles"""
-        print("Started the Clock's Thread...")
         self.clock.run()
         self.clock.start()
+
+    def stop(self):
+        """Stops the clock's mainloop"""
+        self.clock.stop()
+
+    def kill(self):
+        """Kills the clock's mainloop thread (cleaner)"""
+        self.clock.kill()

@@ -1,9 +1,10 @@
 """
 The editor's interface
 """
-import tkinter as tk
-from tkinter import filedialog
 from multiprocessing import Process
+from tkinter import filedialog
+import tkinter as tk
+import os
 
 from .. import VirtualMachine as VMmod
 from .. import Compiler
@@ -154,8 +155,4 @@ class EditorInterface(tk.Tk):
 		filename = filedialog.askopenfilename(**options)
 
 		if filename:
-			text = open(filename, 'r')
-			vm = VMmod.VirtualMachine()
-			vm.createUI()
-			vm.run()
-			text.close()
+			VMmod.VirtualMachine.SpawnAndExecute(filename)

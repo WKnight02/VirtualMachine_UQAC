@@ -3,6 +3,8 @@ from multiprocessing import Process
 from threading import Thread
 from time import sleep
 
+from ..Display import *
+
 from .IComponent import *
 
 class CLOCK(IComponent):
@@ -24,12 +26,14 @@ class CLOCK(IComponent):
         self.bus.clock()
 
     def mainloop(self):
+        printe('Clock is entering mainloop...')
         while not self.KILL:
             if self.TICKING:
                 self.tick()
             sleep(self.TICK_INTERVAL / 1000)
         self.KILL = False
         self.THREAD = None
+        printe('Clock has exited mainloop.')
 
     def run(self):
         if self.THREAD is None:

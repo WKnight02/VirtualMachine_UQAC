@@ -1,10 +1,12 @@
 # -*- coding:utf8 -*-
+from ..Display import *
+
 from ..utilities import int16
 from ..logic.Operation import *
 from .IComponent import *
 from .ALU import *
 
-# Meh
+# Store the unmodified CPU functions, just in case.
 CPU_OPERATIONS = {}
 
 class CpuError(Exception): pass
@@ -19,6 +21,9 @@ class CPU(IComponent):
     STATE_CARRY = 2
     STATE_ZERO = 3
     STATE_CND = 4
+
+    # Is the execution halted ?
+    STATE_HALT = 15
 
     OPERATION_LOOKUP = Operation.computeReverseLookup()
 
@@ -65,6 +70,8 @@ class CPU(IComponent):
     def fetch(self):
         """Current instruction"""
         self.IR = self.getShared(self.PC)
+        if self.IR is None:
+            self.IR = Operation.DEFINED['HLT'][0]
         return self.IR
 
     def decode(self):
@@ -72,7 +79,7 @@ class CPU(IComponent):
         opcode = self.IR & 0xFF00
 
         if opcode not in self.OPERATION_LOOKUP:
-            raise DecodingError('Unknown opcode "%d" at [%x]' % (opcode, self.PC))
+            raise DecodingError('Unknown opcode "0x%04X" at [0x%04X]' % (opcode, self.PC))
         self.PC += 1
 
         operation, *params = self.OPERATION_LOOKUP[opcode]
@@ -100,12 +107,25 @@ class CPU(IComponent):
         return operation, decoded
 
     def execute(self, operation, args):
-        return self.invoke(operation)(*args)
+        try:
+            return self.invoke(operation)(*args)
+        except Exception as e:
+            raise ExecutionError(
+                '\n > An error occured while processing instruction 0x%04X[%s] at [0x%04X]...\n Error: %s' % (
+                    self.IR, operation, self.PC, str(e))
+                )
 
     def clock(self):
+
+        # Do nothing if program halted.
+        if self.getStateBit(self.STATE_HALT): return
+        #printf('\r0x%04X', self.PC)
+
+        # Fetch, decode, execute.
         self.fetch()
         operation, args = self.decode()
         self.execute(operation, args)
+
         return self
 
     # MEGA DEF OF DOOM
@@ -114,8 +134,7 @@ class CPU(IComponent):
         try:
             return getattr(self, method.upper())
         except AttributeError: # Empty function
-            pass
-        return lambda *args, **kargs: None
+            return lambda *args, **kargs: None
 
     def Managed(*types, store=None, status=None):
         """This ensure each function affects correctly the different CPU registers.
@@ -160,6 +179,7 @@ class CPU(IComponent):
 
                 # Call with converted args the function
                 value = method(self, *cargs)
+                if value is None: value = 1
 
                 # Check sign
                 sign = 0
@@ -289,5 +309,6 @@ class CPU(IComponent):
         return adr
 
     # \o/
-    def NOP(self): pass
-    def HALT(self): pass
+    def NOP(self): return
+    def HLT(self):
+        self.setStateBit(self.STATE_HALT, 1)

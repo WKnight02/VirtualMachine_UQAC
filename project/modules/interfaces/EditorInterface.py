@@ -6,7 +6,10 @@ from tkinter import filedialog
 import tkinter as tk
 import os
 
-from .. import VirtualMachine as VMmod
+from .. import VirtualMachine as VM_Module
+#print(dir())
+#print(dir(VM_Module.Compiler))
+#VirtualMachine = VM_Module.VirtualMachine # HOLY BLACKMAGIC AAAAAAAAAAH
 from .. import Compiler
 
 __all__ = ['EditorInterface']
@@ -24,8 +27,6 @@ class EditorInterface(tk.Tk):
 		"""You must provide a Core to actually process the inputs in a fashioned way. (see: bin.calcCore)
 		"""
 		super().__init__()
-
-		this.buttons = {}
 
 		# Sets the size of the interface
 		this.height = kargs.get("height", this.DEFAULTS["height"])
@@ -68,7 +69,6 @@ class EditorInterface(tk.Tk):
 		textEditor.pack(side=tk.RIGHT, fill=tk.Y)
 		textResultat.pack(side=tk.RIGHT, fill=tk.Y)
 
-
 		# Display
 		p.add(MenuButtons)
 		p.add(textEditor)
@@ -97,8 +97,8 @@ class EditorInterface(tk.Tk):
 		"""Ouvre un fichier txt
 		"""
 		options = {}
-		options['defaultextension'] = '.txt'
-		options['filetypes'] = [('all files', '.*'), ('text files', '.txt')]
+		options['defaultextension'] = '.tps'
+		options['filetypes'] = [('all files', '.*'), ('text files', '.txt'), ('TeamPouleSource', '.tps')]
 		options['initialdir'] = '~/'
 		options['initialfile'] = 'fichier.txt'
 		options['parent'] = this
@@ -114,7 +114,8 @@ class EditorInterface(tk.Tk):
 
 
 	def Compile(this):
-
+		"""Compile some source
+		"""
 		Lines = this.Input.get("1.0",tk.END)
 		SplitLines = Lines.split("\n")
 		compiled, erreur = Compiler.CompileProgram(SplitLines)
@@ -136,15 +137,17 @@ class EditorInterface(tk.Tk):
 			text = "Erreur de compilation :\n"+erreur
 			this.ShowResultCompile(text)
 
-
-
 	def ShowResultCompile(this,text):
+		"""Afficher le résultat de la compilation
+		"""
 		this.resultat.config(state=tk.NORMAL)
 		this.resultat.delete("1.0",tk.END)
 		this.resultat.insert("1.0",text)
 		this.resultat.config(state=tk.DISABLED)
 
-	def Execute(this) :
+	def Execute(this):
+		"""Execute some compiled script
+		"""
 		options = {}
 		options['defaultextension'] = '.tpc'
 		options['filetypes'] = [('TeamPouleCompiled', '.tpc')]
@@ -155,4 +158,4 @@ class EditorInterface(tk.Tk):
 		filename = filedialog.askopenfilename(**options)
 
 		if filename:
-			VMmod.VirtualMachine.SpawnAndExecute(filename)
+			VirtualMachine.SpawnAndExecute(filename)

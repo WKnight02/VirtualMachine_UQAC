@@ -21,9 +21,11 @@ class CLOCK(IComponent):
 
     def setTickInterval(self, tick_interval):
         self.TICK_INTERVAL = tick_interval
+        return self
 
     def tick(self):
         self.bus.clock()
+        return self
 
     def mainloop(self):
         printe('Clock is entering mainloop...')
@@ -34,6 +36,7 @@ class CLOCK(IComponent):
         self.KILL = False
         self.THREAD = None
         printe('Clock has exited mainloop.')
+        return self
 
     def run(self):
         if self.THREAD is None:
@@ -44,14 +47,20 @@ class CLOCK(IComponent):
     def start(self):
         self.TICKING = True
         self.run()
+        return self
 
     def stop(self):
         self.TICKING = False
+        return self
 
     def kill(self):
         self.KILL = True
+        return self
 
-    def isRunning(self):
+    def isTicking(self):
+        return self.TICKING
+
+    def isThreadStarted(self):
         return self.THREAD is not None
 
     def createUI(self, root, *args, **kargs):

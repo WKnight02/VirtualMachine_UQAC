@@ -37,7 +37,8 @@ class EditorInterface(tk.Tk):
 
 	# Internal function setting up the components/widgets
 	def create_widgets(self):
-		"""Cree la fenetre de l'interface
+		"""
+		Create the differents element of the interface screen
 		"""
 		# This is the main vertical layout (screen / buttons)
 		Pane = tk.PanedWindow(self, orient=tk.VERTICAL)
@@ -64,10 +65,6 @@ class EditorInterface(tk.Tk):
 		self.resultat = textResultat = tk.Text(Pane, height=8, background='white', padx=5, pady=5)
 		self.resultat.config(state=tk.DISABLED)
 
-		# Packing
-		#textEditor.pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
-		#textResultat.pack(side=tk.RIGHT, fill=tk.Y)
-
 		# Display
 		Pane.add(textEditor, stretch='always')
 		Pane.add(textResultat)
@@ -92,7 +89,7 @@ class EditorInterface(tk.Tk):
 			data = self.Input.get("1.0",tk.END)
 			text.write(data)
 			text.close()
-
+	#Open a File
 	def OpenFile(self):
 		"""Ouvre un fichier txt
 		"""
@@ -112,7 +109,7 @@ class EditorInterface(tk.Tk):
 			self.Input.insert(tk.END, data)
 			self.Input.see(tk.END)
 
-
+	#Compile and save the compiled code
 	def Compile(self):
 		"""Compile some source
 		"""
@@ -137,6 +134,7 @@ class EditorInterface(tk.Tk):
 			text = "Erreur de compilation :\n"+erreur
 			self.ShowResultCompile(text)
 
+	#Show the result of the compilation
 	def ShowResultCompile(self,text):
 		"""Afficher le résultat de la compilation
 		"""
@@ -145,6 +143,7 @@ class EditorInterface(tk.Tk):
 		self.resultat.insert("1.0",text)
 		self.resultat.config(state=tk.DISABLED)
 
+	#Open a compiled File
 	def Execute(self):
 		"""Execute some compiled script
 		"""

@@ -91,7 +91,7 @@ class VirtualMachine(object):
             try: controllerUI.refresh()
             except: pass
         self.clock.setTickCallback(tickCallback)
-
+        
         return root
 
     def loadProgram(self, integers, **kargs):

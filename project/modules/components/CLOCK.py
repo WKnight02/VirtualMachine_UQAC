@@ -3,9 +3,8 @@ from multiprocessing import Process
 from threading import Thread
 from time import sleep
 
-from ..Display import *
-
 from .IComponent import *
+from ..interfaces.ControllerInterface import * 
 
 class CLOCK(IComponent):
     """CLOCK, DEAR TICKING CLOCK"""
@@ -41,7 +40,6 @@ class CLOCK(IComponent):
         """This is where all the magic happens:
         It is the loop started in the parallel thread."""
 
-        printe('Clock is entering mainloop...')
 
         # While we are allowed to live:
         while not self.KILL:
@@ -59,7 +57,6 @@ class CLOCK(IComponent):
         self.KILL = False
         self.TICKING = False
         self.THREAD = None
-        printe('Clock has exited mainloop.')
 
         return self
 

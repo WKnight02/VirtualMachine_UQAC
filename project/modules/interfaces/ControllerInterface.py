@@ -13,10 +13,9 @@ class ControllerInterface(tk.Frame):
 	def __init__(self, *args, **kargs):
 		super().__init__(*args, **kargs)
 		self.create_widgets()
-
 	# Internal function setting up the components/widgets
 	def create_widgets(self):
-		"""^^"""
+		"""Create the differents element of the screen"""
 		self.PlayButton = PlayButton = tk.Button(self, text='?', width=5, padx=5, command=self.onControlPress)
 		ClockMode = tk.Button(self, text='1 Cycle', command=self.onSinglePress, bg='#AAF')
 
@@ -27,7 +26,6 @@ class ControllerInterface(tk.Frame):
 		self.LabelPC = LabelPC = tk.Label(self, text='0')
 
 		self.ResetPC = ResetPC = tk.Button(self, text='R', bg='#FAA', fg='#FFF', command=self.onReset)
-
 		# Packing
 		PlayButton.pack(side=tk.LEFT, fill=tk.Y)
 		ClockMode.pack(side=tk.LEFT, fill=tk.Y)
@@ -35,11 +33,9 @@ class ControllerInterface(tk.Frame):
 		DelayScale.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 		LabelPC.pack(side=tk.LEFT, fill=tk.Y)
 		ResetPC.pack(side=tk.LEFT, fill=tk.Y)
-
 	def setControlledVM(self, vm):
 		"""Binds VM's components to the controls"""
 		self.vm = vm
-
 	def refresh(self):
 		"""Update everything on the UI"""
 

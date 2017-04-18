@@ -16,38 +16,22 @@ class ControllerInterface(tk.Frame):
 
 	# Internal function setting up the components/widgets
 	def create_widgets(self):
-		"""
-			Cree la fenetre de l'interface
-		"""
-		# This is the main vertical layout (screen / buttons)
-		Pane = tk.PanedWindow(self, orient=tk.HORIZONTAL)
+		"""^^"""
+		self.PlayButton = PlayButton = tk.Button(self, text='?', width=5, command=self.onControlPress)
+		ClockMode = tk.Button(self, text='1 Cycle', command=self.onSinglePress)
 
-		# Cree les bouttons Play/Pause et le boutton clock mode
-		MenuButtons = tk.Frame(Pane)
-
-		self.PlayButton = PlayButton = tk.Button(MenuButtons, text='?', width=5, command=self.onControlPress)
-		PlayButton.pack(side=tk.LEFT, fill=tk.Y, expand=1)
-
-		ClockMode = tk.Button(MenuButtons, text='1 Cycle', command=self.onSinglePress)
-		ClockMode.pack(side=tk.LEFT, fill=tk.Y, expand=1)
-
-		TickIntervalFrame = tk.Frame(Pane)
-
-		LabelDelayScale = tk.Label(TickIntervalFrame, text='Tick Interval (ms):')
-		LabelDelayScale.pack(side=tk.LEFT, fill=tk.Y, expand=1)
-
-		self.DelayScale = DelayScale = tk.Scale(TickIntervalFrame, from_=100, to=0, orient=tk.HORIZONTAL)
+		LabelDelayScale = tk.Label(self, text='Tick Interval (ms):')
+		self.DelayScale = DelayScale = tk.Scale(self, from_=250, to=0, orient=tk.HORIZONTAL)
 		DelayScale.set(5)
+
+		self.LabelPC = LabelPC = tk.Label(self, text='0', width=5)
+
+		# Packing
+		PlayButton.pack(side=tk.LEFT, fill=tk.Y)
+		ClockMode.pack(side=tk.LEFT, fill=tk.Y)
+		LabelDelayScale.pack(side=tk.LEFT, fill=tk.Y)
 		DelayScale.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
-
-		self.LabelPC = LabelPC = tk.Label(Pane, text='0', width=50)
-		LabelPC.pack(side=tk.RIGHT, fill=tk.Y, expand=1)
-
-		# Display
-		Pane.add(MenuButtons)
-		Pane.add(TickIntervalFrame)
-		Pane.add(LabelPC)
-		Pane.pack(side=tk.TOP, fill=tk.BOTH, expand=1, pady=5, padx=5)
+		LabelPC.pack(side=tk.LEFT, fill=tk.Y)
 
 	def setControlledCpu(self, cpu):
 		self.cpu = cpu

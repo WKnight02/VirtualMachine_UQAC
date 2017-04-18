@@ -22,8 +22,18 @@ class BUS(IComponent):
         return self
 
     def clock(self):
+        """Tick every component that want to answer, return eventual infos
+        from them."""
+        infos = []
+
         for component in self.REGISTERED_COMPONENT:
-            component.clock()
+            info = component.clock()
+
+            # If the component wanted to say something
+            if info is not None:
+                infos.append(info)
+
+        return infos
 
     def event(self):
         # Say wut ?

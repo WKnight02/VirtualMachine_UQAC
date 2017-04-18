@@ -30,6 +30,10 @@ class CPU(IComponent):
     def __init__(self, bus):
         super().__init__(bus)
         self.ALU = ALU() # Inutile dans notre implémentation ?
+        self.initRegisters()
+
+    def initRegisters(self):
+        """The initialization"""
 
         # A B C D
         self.REGISTERS = [0 for i in range(4)]
@@ -107,6 +111,7 @@ class CPU(IComponent):
         return operation, decoded
 
     def execute(self, operation, args):
+        """Tries to execute the operation with its decoded arguments"""
         try:
             return self.invoke(operation)(*args)
         except Exception as e:
@@ -118,15 +123,14 @@ class CPU(IComponent):
     def clock(self):
 
         # Do nothing if program halted.
-        if self.getStateBit(self.STATE_HALT): return
+        if self.getStateBit(self.STATE_HALT): return ('cpu', 'halt')
         #printf('\r0x%04X', self.PC)
 
         # Fetch, decode, execute.
         self.fetch()
         operation, args = self.decode()
         self.execute(operation, args)
-
-        return self
+        return
 
     # MEGA DEF OF DOOM
     def invoke(self, method):

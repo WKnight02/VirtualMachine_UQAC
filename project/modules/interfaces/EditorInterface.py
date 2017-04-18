@@ -23,15 +23,14 @@ class EditorInterface(tk.Tk):
 		"width": 450,
 	}
 
-	def __init__(this,*args,**kargs):
-		"""You must provide a Core to actually process the inputs in a fashioned way. (see: bin.calcCore)
+	def __init__(this, *args, **kargs):
+		"""The ASM editor #TEAMPOULE
 		"""
 		super().__init__()
 
 		# Sets the size of the interface
 		this.height = kargs.get("height", this.DEFAULTS["height"])
 		this.width = kargs.get("width", this.DEFAULTS["width"])
-		this.resizable(width=False, height=False)
 		this.geometry("%dx%d" % (this.width, this.height))
 
 		this.create_widgets()

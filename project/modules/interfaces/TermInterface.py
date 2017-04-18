@@ -21,9 +21,7 @@ class TermInterface(tk.Frame):
             highlightbackground='grey',
             highlightcolor='white'
             )
-        self.term.insert(tk.END, ' ' * width * height)
-        self.disable()
-
+        self.clearAll()
         self.term.pack()
 
     def enable(self):
@@ -33,6 +31,13 @@ class TermInterface(tk.Frame):
     def disable(self):
         self.term.config(state=tk.DISABLED)
         return self.term
+
+    def clearAll(self):
+        term = self.enable()
+        term.delete('1.0', tk.END)
+        term.insert(tk.END, ' ' * self.width * self.height)
+        self.disable()
+        return self
 
     def setCharAt(self, position, char):
         term = self.enable()
@@ -45,6 +50,7 @@ class TermInterface(tk.Frame):
         # Clear any extra char + close edition
         term.delete('1.%d' % (self.height * self.width), tk.END)
         self.disable()
+        return self
 
 if __name__ == '__main__':
 

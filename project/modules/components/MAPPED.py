@@ -13,11 +13,15 @@ class MAPPED(IComponent):
     def rangemap(self, start, end):
         self.start = start
         self.end = end
-        self.map = [0 for i in range(start, end + 1)]
+        self.clear()
         return self
 
     def sizemap(self, start, size):
         return self.rangemap(start, start+size)
+
+    def clear(self):
+        self.map = [0 for i in range(self.start, self.end + 1)]
+        return self
 
     def getSize(self):
         size = self.end - self.start

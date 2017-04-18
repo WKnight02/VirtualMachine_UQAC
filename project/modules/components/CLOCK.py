@@ -18,13 +18,19 @@ class CLOCK(IComponent):
 
         self.KILL = False
         self.THREAD = None
+        self.CALLBACK = lambda: None
 
     def setTickInterval(self, tick_interval):
         self.TICK_INTERVAL = tick_interval
         return self
 
+    def setTickCallback(self, callback):
+        self.CALLBACK = callback
+        return self
+
     def tick(self):
         self.bus.clock()
+        self.CALLBACK()
         return self
 
     def mainloop(self):
@@ -40,7 +46,7 @@ class CLOCK(IComponent):
 
     def run(self):
         if self.THREAD is None:
-            self.THREAD = Thread(target=self.mainloop)
+            self.THREAD = Thread(target=self.mainloop, name='CLOCK_THREAD')
             self.THREAD.start()
         return self.THREAD
 
@@ -62,22 +68,3 @@ class CLOCK(IComponent):
 
     def isThreadStarted(self):
         return self.THREAD is not None
-
-    def createUI(self, root, *args, **kargs):
-        self.ui = ui = ControllerInterface(root, *args, **kargs)
-        """
-        ui.setTickInterval = lambda event: self.setTickInterval(event.value)
-
-        def temp(x, y):
-            do_thing()
-            return x
-
-        ui.play = temp
-
-        def temp(lol):
-            return lol
-
-        ui.pause = temp
-        """
-
-        return ui

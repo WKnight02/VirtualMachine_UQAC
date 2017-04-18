@@ -8,3 +8,4 @@ from .ROM import *
 from .RAM import *
 
 from .TERM import *
+from .KEYBOARD import *

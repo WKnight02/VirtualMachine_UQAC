@@ -6,64 +6,83 @@ from tkinter import filedialog
 
 __all__ = ['ControllerInterface']
 
-class ControllerInterface(tk.Tk):
+class ControllerInterface(tk.Frame):
 	"""Controllers's interface
 	"""
 
-	DEFAULTS = {
-		"height": 100,
-		"width": 450,
-	}
-
-	def __init__(this, *args, **kargs):
-		"""
-
-		"""
-		super().__init__()
-
-		this.buttons = {}
-
-		# Sets the size of the interface
-		this.height = kargs.get("height", this.DEFAULTS["height"])
-		this.width = kargs.get("width", this.DEFAULTS["width"])
-
-		this.resizable(width=False, height=False)
-		this.geometry("%dx%d" % (this.width, this.height))
-
-		this.setTickInterval = lambda *args: None
-		this.pause = lambda *args: None
-		this.play = lambda *args: None
-		this.tick = lambda *args: None
-
-		this.create_widgets()
+	def __init__(self, *args, **kargs):
+		super().__init__(*args, **kargs)
+		self.create_widgets()
 
 	# Internal function setting up the components/widgets
-	def create_widgets(this):
+	def create_widgets(self):
 		"""
 			Cree la fenetre de l'interface
 		"""
 		# This is the main vertical layout (screen / buttons)
-		p = tk.PanedWindow(this, orient=tk.HORIZONTAL)
+		Pane = tk.PanedWindow(self, orient=tk.HORIZONTAL)
 
-		#Cree les bouttons Play/Pause et le boutton clock mode
-		MenuButtons = tk.Frame(this, borderwidth=2, relief=tk.GROOVE)
-		this.PlayButton = PlayButton = tk.Button(MenuButtons, text="Play", command=this.Run)
-		PlayButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
+		# Cree les bouttons Play/Pause et le boutton clock mode
+		MenuButtons = tk.Frame(Pane)
 
-		ClockMode = tk.Button(MenuButtons, text="1 cycle")
-		ClockMode.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
-		champ_label = tk.Label(p, text="Modifier la vitesse:")
-		champ_label.pack()
-		w = tk.Scale(p, from_=10, to=1, orient=tk.HORIZONTAL)
-		w.set(5)
-		w.pack()
+		self.PlayButton = PlayButton = tk.Button(MenuButtons, text='?', width=5, command=self.onControlPress)
+		PlayButton.pack(side=tk.LEFT, fill=tk.Y, expand=1)
+
+		ClockMode = tk.Button(MenuButtons, text='1 Cycle', command=self.onSinglePress)
+		ClockMode.pack(side=tk.LEFT, fill=tk.Y, expand=1)
+
+		TickIntervalFrame = tk.Frame(Pane)
+
+		LabelDelayScale = tk.Label(TickIntervalFrame, text='Tick Interval (ms):')
+		LabelDelayScale.pack(side=tk.LEFT, fill=tk.Y, expand=1)
+
+		self.DelayScale = DelayScale = tk.Scale(TickIntervalFrame, from_=100, to=0, orient=tk.HORIZONTAL)
+		DelayScale.set(5)
+		DelayScale.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+
+		self.LabelPC = LabelPC = tk.Label(Pane, text='0', width=50)
+		LabelPC.pack(side=tk.RIGHT, fill=tk.Y, expand=1)
 
 		# Display
-		p.add(MenuButtons)
-		p.add(champ_label)
-		p.add(w)
-		p.pack(side=tk.TOP, expand=tk.Y, fill=tk.BOTH, pady=5, padx=5)
+		Pane.add(MenuButtons)
+		Pane.add(TickIntervalFrame)
+		Pane.add(LabelPC)
+		Pane.pack(side=tk.TOP, fill=tk.BOTH, expand=1, pady=5, padx=5)
 
-	def Run(this):
-		this.PlayButton.config(text="Pause")
-		print("Run")
+	def setControlledCpu(self, cpu):
+		self.cpu = cpu
+
+	def setControlledClock(self, clock):
+		self.clock = clock
+
+	def refresh(self):
+
+		# Retrieve the state of the Clock
+		if self.clock.isThreadStarted():
+			ticking = self.clock.isTicking()
+			controlText = 'Stop' if ticking else 'Play'
+			relied = tk.SUNKEN if ticking else tk.RAISED
+			self.PlayButton.config(text=controlText)
+		else:
+			self.PlayButton.config(text='...', relief=tk.RAISED)
+
+		# Only setting from refresh
+		interval = self.DelayScale.get()
+		self.clock.TICK_INTERVAL = interval
+
+		# Retrieve the Program Counter
+		currentPC = '0x%04X' % self.cpu.PC
+		self.LabelPC.config(text=currentPC)
+
+	def onSinglePress(self):
+		self.clock.stop()
+		self.clock.tick()
+		self.refresh()
+
+	def onControlPress(self):
+		if self.clock.isThreadStarted():
+			if self.clock.isTicking():
+				self.clock.stop()
+			else:
+				self.clock.start()
+		self.refresh()

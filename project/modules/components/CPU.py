@@ -285,27 +285,27 @@ class CPU(IComponent):
     ###
     # Flow control
 
-    @Managed('a')
+    @Managed('v')
     def JMP(self, adr):
-        self.IR = adr
+        self.PC = adr
         return adr
 
-    @Managed('a')
+    @Managed('v')
     def JMZ(self, adr):
         if self.getStateBit(self.STATE_ZERO):
-            self.IR = adr
+            self.PC = adr
         return adr
 
-    @Managed('a')
+    @Managed('v')
     def JMO(self, adr):
         if self.getStateBit(self.STATE_CARRY):
-            self.IR = adr
+            self.PC = adr
         return adr
 
-    @Managed('a')
+    @Managed('v')
     def JMC(self, adr):
         if self.getStateBit(self.STATE_CND):
-            self.IR = adr
+            self.PC = adr
         return adr
 
     # \o/

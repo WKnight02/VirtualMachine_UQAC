@@ -158,4 +158,4 @@ class EditorInterface(tk.Tk):
 		filename = filedialog.askopenfilename(**options)
 
 		if filename:
-			VirtualMachine.SpawnAndExecute(filename)
+			VM_Module.VirtualMachine.SpawnAndExecute(filename)

@@ -24,4 +24,6 @@ class TERM(MAPPED):
             except:
                 char = '?'
 
-            self.ui.setCharAt(position, char)
+            # Could crash on window closing...
+            try: self.ui.setCharAt(position, char)
+            except: pass

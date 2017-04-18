@@ -40,39 +40,40 @@ class EditorInterface(tk.Tk):
 		"""Cree la fenetre de l'interface
 		"""
 		# This is the main vertical layout (screen / buttons)
-		p = tk.PanedWindow(self, orient=tk.VERTICAL)
+		Pane = tk.PanedWindow(self, orient=tk.VERTICAL)
 
 		#Cree les bouttons enregistrer et charger
-		MenuButtons = tk.Frame(self, borderwidth=2, relief=tk.GROOVE)
+		MenuButtons = tk.Frame(self, padx=5, pady=5)
 
 		LoadButton = tk.Button(MenuButtons, text="Ouvrir", command=self.OpenFile)
-		LoadButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
+		LoadButton.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 
 		SaveButton = tk.Button(MenuButtons, text="Sauvegarder", command=self.SaveFile)
-		SaveButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
+		SaveButton.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 
 		CompileButton = tk.Button(MenuButtons, text="Compiler", command=self.Compile)
-		CompileButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
+		CompileButton.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 
 		ExecuteButton = tk.Button(MenuButtons, text="Executer", command=self.Execute)
-		ExecuteButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
+		ExecuteButton.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 
 		# Cree la zone d'edition
-		self.Input = textEditor = tk.Text(p, background='white')
+		self.Input = textEditor = tk.Text(Pane, background='white', padx=5, pady=5)
 
 		#Cree la zone d affichage
-		self.resultat = textResultat = tk.Text(p, background='white')
+		self.resultat = textResultat = tk.Text(Pane, height=8, background='white', padx=5, pady=5)
 		self.resultat.config(state=tk.DISABLED)
 
 		# Packing
-		textEditor.pack(side=tk.RIGHT, fill=tk.Y)
-		textResultat.pack(side=tk.RIGHT, fill=tk.Y)
+		#textEditor.pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
+		#textResultat.pack(side=tk.RIGHT, fill=tk.Y)
 
 		# Display
-		p.add(MenuButtons)
-		p.add(textEditor)
-		p.add(textResultat)
-		p.pack(side=tk.TOP, expand=tk.Y, fill=tk.BOTH, pady=5, padx=5)
+		Pane.add(textEditor, stretch='always')
+		Pane.add(textResultat)
+
+		MenuButtons.pack(side=tk.TOP, fill=tk.X)
+		Pane.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
 	#Save a FILE
 	def SaveFile(self):

@@ -23,46 +23,46 @@ class EditorInterface(tk.Tk):
 		"width": 450,
 	}
 
-	def __init__(this, *args, **kargs):
+	def __init__(self, *args, **kargs):
 		"""The ASM editor #TEAMPOULE
 		"""
 		super().__init__()
 
 		# Sets the size of the interface
-		this.height = kargs.get("height", this.DEFAULTS["height"])
-		this.width = kargs.get("width", this.DEFAULTS["width"])
-		this.geometry("%dx%d" % (this.width, this.height))
+		self.height = kargs.get("height", self.DEFAULTS["height"])
+		self.width = kargs.get("width", self.DEFAULTS["width"])
+		self.geometry("%dx%d" % (self.width, self.height))
 
-		this.create_widgets()
+		self.create_widgets()
 
 	# Internal function setting up the components/widgets
-	def create_widgets(this):
+	def create_widgets(self):
 		"""Cree la fenetre de l'interface
 		"""
 		# This is the main vertical layout (screen / buttons)
-		p = tk.PanedWindow(this, orient=tk.VERTICAL)
+		p = tk.PanedWindow(self, orient=tk.VERTICAL)
 
 		#Cree les bouttons enregistrer et charger
-		MenuButtons = tk.Frame(this, borderwidth=2, relief=tk.GROOVE)
+		MenuButtons = tk.Frame(self, borderwidth=2, relief=tk.GROOVE)
 
-		LoadButton = tk.Button(MenuButtons, text="Ouvrir", command=this.OpenFile)
+		LoadButton = tk.Button(MenuButtons, text="Ouvrir", command=self.OpenFile)
 		LoadButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
 
-		SaveButton = tk.Button(MenuButtons, text="Sauvegarder", command=this.SaveFile)
+		SaveButton = tk.Button(MenuButtons, text="Sauvegarder", command=self.SaveFile)
 		SaveButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
 
-		CompileButton = tk.Button(MenuButtons, text="Compiler", command=this.Compile)
+		CompileButton = tk.Button(MenuButtons, text="Compiler", command=self.Compile)
 		CompileButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
 
-		ExecuteButton = tk.Button(MenuButtons, text="Executer", command=this.Execute)
+		ExecuteButton = tk.Button(MenuButtons, text="Executer", command=self.Execute)
 		ExecuteButton.pack(side=tk.LEFT, expand=tk.Y, fill=tk.BOTH)
 
 		# Cree la zone d'edition
-		this.Input = textEditor = tk.Text(p, background='white')
+		self.Input = textEditor = tk.Text(p, background='white')
 
 		#Cree la zone d affichage
-		this.resultat = textResultat = tk.Text(p, background='white')
-		this.resultat.config(state=tk.DISABLED)
+		self.resultat = textResultat = tk.Text(p, background='white')
+		self.resultat.config(state=tk.DISABLED)
 
 		# Packing
 		textEditor.pack(side=tk.RIGHT, fill=tk.Y)
@@ -75,7 +75,7 @@ class EditorInterface(tk.Tk):
 		p.pack(side=tk.TOP, expand=tk.Y, fill=tk.BOTH, pady=5, padx=5)
 
 	#Save a FILE
-	def SaveFile(this):
+	def SaveFile(self):
 		"""Enregistre un fichier txt avec le code dans l editeur
 		"""
 		options = {}
@@ -83,16 +83,16 @@ class EditorInterface(tk.Tk):
 		options['filetypes'] = [('all files', '.*'), ('text files', '.txt')]
 		options['initialdir'] = '~/'
 		options['initialfile'] = 'fichier.txt'
-		options['parent'] = this
+		options['parent'] = self
 		options['title'] = 'Sauvegarder'
 		filename = filedialog.asksaveasfilename(**options)
 		if filename:
 			text = open(filename, 'w')
-			data = this.Input.get("1.0",tk.END)
+			data = self.Input.get("1.0",tk.END)
 			text.write(data)
 			text.close()
 
-	def OpenFile(this):
+	def OpenFile(self):
 		"""Ouvre un fichier txt
 		"""
 		options = {}
@@ -100,22 +100,22 @@ class EditorInterface(tk.Tk):
 		options['filetypes'] = [('all files', '.*'), ('text files', '.txt'), ('TeamPouleSource', '.tps')]
 		options['initialdir'] = '~/'
 		options['initialfile'] = 'fichier.txt'
-		options['parent'] = this
+		options['parent'] = self
 		options['title'] = 'Ouvrir'
 		filename = filedialog.askopenfilename(**options)
 		if filename:
 			text = open(filename, 'r')
 			data = text.read()
 			text.close()
-			this.Input.delete("1.0",tk.END)
-			this.Input.insert(tk.END, data)
-			this.Input.see(tk.END)
+			self.Input.delete("1.0",tk.END)
+			self.Input.insert(tk.END, data)
+			self.Input.see(tk.END)
 
 
-	def Compile(this):
+	def Compile(self):
 		"""Compile some source
 		"""
-		Lines = this.Input.get("1.0",tk.END)
+		Lines = self.Input.get("1.0",tk.END)
 		SplitLines = Lines.split("\n")
 		compiled, erreur = Compiler.CompileProgram(SplitLines)
 		if compiled != '':
@@ -124,27 +124,27 @@ class EditorInterface(tk.Tk):
 			options['filetypes'] = [('TeamPouleCompiled', '.tpc')]
 			options['initialdir'] = '~/'
 			options['initialfile'] = 'Compiled.tpc'
-			options['parent'] = this
+			options['parent'] = self
 			options['title'] = 'Sauvegarder'
 			filename = filedialog.asksaveasfilename(**options)
 			if filename:
-				this.ShowResultCompile("Compilation reussi avec succes")
+				self.ShowResultCompile("Compilation reussi avec succes")
 				text = open(filename, 'w')
 				text.write(compiled)
 				text.close()
 		else:
 			text = "Erreur de compilation :\n"+erreur
-			this.ShowResultCompile(text)
+			self.ShowResultCompile(text)
 
-	def ShowResultCompile(this,text):
+	def ShowResultCompile(self,text):
 		"""Afficher le résultat de la compilation
 		"""
-		this.resultat.config(state=tk.NORMAL)
-		this.resultat.delete("1.0",tk.END)
-		this.resultat.insert("1.0",text)
-		this.resultat.config(state=tk.DISABLED)
+		self.resultat.config(state=tk.NORMAL)
+		self.resultat.delete("1.0",tk.END)
+		self.resultat.insert("1.0",text)
+		self.resultat.config(state=tk.DISABLED)
 
-	def Execute(this):
+	def Execute(self):
 		"""Execute some compiled script
 		"""
 		options = {}
@@ -152,7 +152,7 @@ class EditorInterface(tk.Tk):
 		options['filetypes'] = [('TeamPouleCompiled', '.tpc')]
 		options['initialdir'] = '~/'
 		options['initialfile'] = 'compiled.tpc'
-		options['parent'] = this
+		options['parent'] = self
 		options['title'] = 'Ouvrir'
 		filename = filedialog.askopenfilename(**options)
 

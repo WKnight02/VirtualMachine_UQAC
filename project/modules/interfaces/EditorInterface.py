@@ -74,10 +74,10 @@ class EditorInterface(tk.Tk):
 		"""Enregistre un fichier txt avec le code dans l editeur
 		"""
 		options = {}
-		options['defaultextension'] = '.txt'
-		options['filetypes'] = [('all files', '.*'), ('text files', '.txt')]
-		options['initialdir'] = '~/'
-		options['initialfile'] = 'fichier.txt'
+		options['defaultextension'] = '.tps'
+		options['filetypes'] = [('TeamPouleSource', '.tps'), ('text files', '.txt'), ('all files', '.*')]
+		options['initialdir'] = ''
+		options['initialfile'] = 'source.tps'
 		options['parent'] = self
 		options['title'] = 'Sauvegarder'
 		filename = filedialog.asksaveasfilename(**options)
@@ -92,9 +92,9 @@ class EditorInterface(tk.Tk):
 		"""
 		options = {}
 		options['defaultextension'] = '.tps'
-		options['filetypes'] = [('all files', '.*'), ('text files', '.txt'), ('TeamPouleSource', '.tps')]
-		options['initialdir'] = '~/'
-		options['initialfile'] = 'fichier.txt'
+		options['filetypes'] = [('TeamPouleSource', '.tps'), ('text files', '.txt'), ('all files', '.*')]
+		options['initialdir'] = ''
+		options['initialfile'] = 'source.tps'
 		options['parent'] = self
 		options['title'] = 'Ouvrir'
 		filename = filedialog.askopenfilename(**options)
@@ -116,9 +116,9 @@ class EditorInterface(tk.Tk):
 		if compiled != '':
 			options = {}
 			options['defaultextension'] = '.txt'
-			options['filetypes'] = [('TeamPouleCompiled', '.tpc')]
-			options['initialdir'] = '~/'
-			options['initialfile'] = 'Compiled.tpc'
+			options['filetypes'] = [('TeamPouleCompiled', '.tpc'), ('text file', '.txt'), ('all files', '*')]
+			options['initialdir'] = ''
+			options['initialfile'] = 'compiled.tpc'
 			options['parent'] = self
 			options['title'] = 'Sauvegarder'
 			filename = filedialog.asksaveasfilename(**options)
@@ -146,8 +146,8 @@ class EditorInterface(tk.Tk):
 		"""
 		options = {}
 		options['defaultextension'] = '.tpc'
-		options['filetypes'] = [('TeamPouleCompiled', '.tpc')]
-		options['initialdir'] = '~/'
+		options['filetypes'] = [('TeamPouleCompiled', '.tpc'), ('text file', '.txt'), ('all files', '*')]
+		options['initialdir'] = ''
 		options['initialfile'] = 'compiled.tpc'
 		options['parent'] = self
 		options['title'] = 'Ouvrir'

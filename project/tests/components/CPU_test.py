@@ -10,8 +10,8 @@ class CPUTestCase(unittest.TestCase):
     def setUp(self):
         bus = self.bus = BUS()
         self.cpu = CPU(bus)
-        self.rom = ROM(bus).rangemap(0, (1<<16) -1)
-        self.ram = RAM(bus).rangemap(1<<16, (1<<16) * 2 - 1)
+        self.rom = ROM(bus).rangemap(0, 255)
+        self.ram = RAM(bus).rangemap(256, 511)
 
     def test_cpu_operation_on_register(self):
         cpu = self.cpu
@@ -64,3 +64,27 @@ class CPUTestCase(unittest.TestCase):
         self.assertEqual(6, cpu.PC)
         self.assertEqual(0xFFFF, cpu.getRegister(1))
         self.assertEqual(0x0001, cpu.getRegister(2))
+
+    def test_operations(self):
+
+        # SET A 256
+        # SET B 0x1234
+        # ST B A
+        program = [
+            0x0501, 256,
+            0x0502, 0x1234,
+            0x0712, 1
+        ]
+
+        self.rom.load(program)
+        cpu, ram = self.cpu, self.ram
+
+        self.assertEqual(0, cpu.getRegister(1))
+        self.assertEqual(0, cpu.getRegister(2))
+        self.assertEqual(0, ram.read(0))
+
+        cpu.clock()
+        cpu.clock()
+        cpu.clock()
+
+        self.assertEqual(0x1234, ram.read(0))

@@ -80,7 +80,8 @@ class CPU(IComponent):
 
     def decode(self):
         """Decoding OPCODE"""
-        opcode = self.IR & 0xFF00
+        code = self.IR
+        opcode = code & 0xFF00
 
         if opcode not in self.OPERATION_LOOKUP:
             raise DecodingError('Unknown opcode "0x%04X" at [0x%04X]' % (opcode, self.PC))
@@ -105,7 +106,14 @@ class CPU(IComponent):
                 self.PC += 1
 
             if psize == 2:
-                decoded.append(self.fetch())
+
+                arg = self.fetch()
+
+                # Do we read the arg value 'as if' or do we read it from register ?
+                if params[1] == 'spc' and code & 0x0010:
+                    arg = self.getRegister(arg)
+
+                decoded.append(arg)
                 self.PC += 1
 
         return operation, decoded
@@ -168,7 +176,7 @@ class CPU(IComponent):
                     T = types[i]
 
                     if T in TYPES['register']:
-                        carg = self.getRegister(carg)
+                        carg = self.getRegister(carg & 0xF)
 
                     elif T in TYPES['address']:
                         carg = self.getShared(carg)

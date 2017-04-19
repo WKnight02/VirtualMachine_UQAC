@@ -4,14 +4,17 @@ import re
 class CompilationError(Exception): pass
 
 class Operation(object):
+    """This object is the binder between source, binary and execution.
+    It defines operations as well as their "prototype".
+    Pattern: "OPNAME": (OPCODE[, FIRST_PARAM [, SECOND_PARAM]])
+    """
 
     DEFINED = {
         'DTA':  (0, 'val'),
 
-
         'SET':  (0x0500, 'reg', 'val'),
-        'LD':   (0x0600, 'reg', 'val'),
-        'ST':   (0x0700, 'reg', 'adr'),
+        'LD':   (0x0600, 'reg', 'spc'),
+        'ST':   (0x0700, 'reg', 'spc'),
         'MV':   (0x0800, 'reg', 'reg'),
 
         'ADD':  (0x1100, 'reg', 'reg'),

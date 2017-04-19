@@ -4,12 +4,16 @@ The editor's interface
 from multiprocessing import Process
 from tkinter import filedialog
 import tkinter as tk
+import os.path
 import os
 
 from .. import VirtualMachine as VM_Module
 from .. import Compiler
 
 __all__ = ['EditorInterface']
+
+def basename(filename):
+	return os.path.splitext(os.path.basename(filename))[0]
 
 class EditorInterface(tk.Tk):
 	"""Editor's interface
@@ -29,6 +33,8 @@ class EditorInterface(tk.Tk):
 		self.height = kargs.get("height", self.DEFAULTS["height"])
 		self.width = kargs.get("width", self.DEFAULTS["width"])
 		self.geometry("%dx%d" % (self.width, self.height))
+
+		self.currentFile = 'myProgram'
 
 		self.create_widgets()
 
@@ -77,15 +83,19 @@ class EditorInterface(tk.Tk):
 		options['defaultextension'] = '.tps'
 		options['filetypes'] = [('TeamPouleSource', '.tps'), ('text files', '.txt'), ('all files', '.*')]
 		options['initialdir'] = ''
-		options['initialfile'] = 'source.tps'
+		options['initialfile'] = self.currentFile + '.tps'
 		options['parent'] = self
 		options['title'] = 'Sauvegarder'
 		filename = filedialog.asksaveasfilename(**options)
+
 		if filename:
 			text = open(filename, 'w')
 			data = self.Input.get("1.0",tk.END)
 			text.write(data)
 			text.close()
+
+			self.currentFile = basename(filename)
+
 	#Open a File
 	def OpenFile(self):
 		"""Ouvre un fichier txt
@@ -94,10 +104,11 @@ class EditorInterface(tk.Tk):
 		options['defaultextension'] = '.tps'
 		options['filetypes'] = [('TeamPouleSource', '.tps'), ('text files', '.txt'), ('all files', '.*')]
 		options['initialdir'] = ''
-		options['initialfile'] = 'source.tps'
+		options['initialfile'] = self.currentFile + '.tps'
 		options['parent'] = self
 		options['title'] = 'Ouvrir'
 		filename = filedialog.askopenfilename(**options)
+
 		if filename:
 			text = open(filename, 'r')
 			data = text.read()
@@ -105,6 +116,8 @@ class EditorInterface(tk.Tk):
 			self.Input.delete("1.0",tk.END)
 			self.Input.insert(tk.END, data)
 			self.Input.see(tk.END)
+
+			self.currentFile = basename(filename)
 
 	#Compile and save the compiled code
 	def Compile(self):
@@ -118,15 +131,18 @@ class EditorInterface(tk.Tk):
 			options['defaultextension'] = '.txt'
 			options['filetypes'] = [('TeamPouleCompiled', '.tpc'), ('text file', '.txt'), ('all files', '*')]
 			options['initialdir'] = ''
-			options['initialfile'] = 'compiled.tpc'
+			options['initialfile'] = self.currentFile + '.tpc'
 			options['parent'] = self
 			options['title'] = 'Sauvegarder'
 			filename = filedialog.asksaveasfilename(**options)
+
 			if filename:
 				self.ShowResultCompile("Compilation reussi avec succes")
 				text = open(filename, 'w')
 				text.write(compiled)
 				text.close()
+				self.currentFile = basename(filename)
+
 		else:
 			text = "Erreur de compilation :\n"+erreur
 			self.ShowResultCompile(text)
@@ -148,10 +164,11 @@ class EditorInterface(tk.Tk):
 		options['defaultextension'] = '.tpc'
 		options['filetypes'] = [('TeamPouleCompiled', '.tpc'), ('text file', '.txt'), ('all files', '*')]
 		options['initialdir'] = ''
-		options['initialfile'] = 'compiled.tpc'
+		options['initialfile'] = self.currentFile + '.tpc'
 		options['parent'] = self
 		options['title'] = 'Ouvrir'
 		filename = filedialog.askopenfilename(**options)
 
 		if filename:
+			self.currentFile = basename(filename)
 			VM_Module.VirtualMachine.SpawnAndExecute(filename)

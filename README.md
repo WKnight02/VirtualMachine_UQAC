@@ -3,10 +3,15 @@
 Bonjour, et merci d'utiliser l'environnement assembleur de la **Team Poule** !
 
 Pour bien commencer, il vous faut une installation valide de `python 3.6+`, incluant les libs suivantes au minimum:
+
 - `sys`
+
 - `tkinter`
+
 - `threading`
+
 - `os` et `os.path`
+
 - `unittest` pour les tests unitaires
 
 Normalement, ces librairies font partie de l'environnement python de base...
@@ -23,7 +28,9 @@ A partir d'ici vous pouvez écrire du code assembleur, l'enregistrer, le compile
 Suite à une erreur de lecture de la spécification, mais aussi suite à ce que l'on pensait être du bon sens, les instructions sur les registres s'écrivent `OP REG1 REG2` et non `OPREG1 REG2`.
 
 Par exemple:
+
 - `ADDA B` devient `ADD A B`
+
 - `STA 0x1547` devient `ST A 0x1547`
 
 ## _#**Machine Virtuelle**:_

@@ -10,8 +10,8 @@ class Operation(object):
 
 
         'SET':  (0x0500, 'reg', 'val'),
-        'LD':   (0x0600, 'reg', 'val'),
-        'ST':   (0x0700, 'reg', 'adr'),
+        'LD':   (0x0600, 'reg', 'spc'),
+        'ST':   (0x0700, 'reg', 'spc'),
         'MV':   (0x0800, 'reg', 'reg'),
 
         'ADD':  (0x1100, 'reg', 'reg'),
@@ -118,7 +118,18 @@ class Operation(object):
                                 return '%d %d' % (int1,int2)
                             except:
                                 raise CompilationError('Argument non valide: Adresse ou valeur attendu')
-
+						#Operation ST et LD
+                        elif Op[2] == 'spc':
+                            if command[2] in 'ABCD':
+                                int1 = (Op[0]+cls.REGISTER[str(command[1])]) | 0x0010
+                                int2 = 0x0000 + cls.REGISTER[str(command[2])]
+                            else:
+                                try:
+                                    int1 = Op[0]+cls.REGISTER[str(command[1])]
+                                    int2 = int(command[2],0)
+                                except:
+                                    raise CompilationError('Argument non valide')
+                            return '%d %d' % (int1,int2)
                         else:
                             raise CompilationError('Argument non valide: Registre attendu')
 

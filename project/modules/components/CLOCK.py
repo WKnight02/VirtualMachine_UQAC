@@ -75,7 +75,8 @@ class CLOCK(IComponent):
     def kill(self, join=False):
         """This does really stop everything: stop the ticking + thread"""
         self.KILL.set()
-        if join: self.THREAD.join()
+        if join and self.THREAD is not None:
+            self.THREAD.join()
         return self
 
     def isTicking(self):
@@ -84,4 +85,6 @@ class CLOCK(IComponent):
 
     def isThreadStarted(self):
         """Is the parallel thread running ?"""
-        return self.THREAD is not None or self.THREAD.isAlive()
+        if self.THREAD is not None:
+            return self.THREAD.isAlive()
+        else: return False

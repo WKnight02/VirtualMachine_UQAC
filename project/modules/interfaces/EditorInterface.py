@@ -7,9 +7,6 @@ import tkinter as tk
 import os
 
 from .. import VirtualMachine as VM_Module
-#print(dir())
-#print(dir(VM_Module.Compiler))
-#VirtualMachine = VM_Module.VirtualMachine # HOLY BLACKMAGIC AAAAAAAAAAH
 from .. import Compiler
 
 __all__ = ['EditorInterface']
@@ -43,7 +40,7 @@ class EditorInterface(tk.Tk):
 		# This is the main vertical layout (screen / buttons)
 		Pane = tk.PanedWindow(self, orient=tk.VERTICAL)
 
-		#Cree les bouttons enregistrer et charger
+		#Cree les bouttons enregistrer, charger , compiler et execute
 		MenuButtons = tk.Frame(self, padx=5, pady=5)
 
 		LoadButton = tk.Button(MenuButtons, text="Ouvrir", command=self.OpenFile)

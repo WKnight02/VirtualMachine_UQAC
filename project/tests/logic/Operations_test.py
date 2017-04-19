@@ -13,7 +13,9 @@ class OperationTestCase(unittest.TestCase):
 		'NOP': '0',
 		'XOR D A': '8964 1',
         'DTA 64':'64',
-        'DTA "Salut toi"': '83 97 108 117 116 32 116 111 105' 
+        'DTA "Salut toi"': '83 97 108 117 116 32 116 111 105',
+		'ST A B':'1809 2',
+		'ST A 1':'1793 1',
         }
 
     SOURCE_NOT_OK = [

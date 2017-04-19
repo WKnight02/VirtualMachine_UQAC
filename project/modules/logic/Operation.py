@@ -9,7 +9,7 @@ class Operation(object):
     Pattern: "OPNAME": (OPCODE[, FIRST_PARAM [, SECOND_PARAM]])
     """
 
-	#Definition de toutes les operations
+    #Definition de toutes les operations
     DEFINED = {
         'DTA':  (0, 'val'),
 
@@ -45,7 +45,7 @@ class Operation(object):
         'HLT':  (0x0F00,)
     }
 
-	#Definition des registres
+    #Definition des registres
     REGISTER = {
         "A": 0x01,
         "B": 0x02,
@@ -65,9 +65,9 @@ class Operation(object):
 
     @classmethod
     def compile(cls, source):
-		"""
-			Compile method for one Line
-		"""
+        """
+            Compile method for one Line
+        """
         command = source.split(" ")
         while command.count(''): del command[command.index('')]
         if len(command) != 0:
@@ -126,7 +126,7 @@ class Operation(object):
                                 return '%d %d' % (int1,int2)
                             except:
                                 raise CompilationError('Argument non valide: Adresse ou valeur attendu')
-						#Operation ST et LD
+                        #Operation ST et LD
                         elif Op[2] == 'spc':
                             if command[2] in 'ABCD':
                                 int1 = (Op[0]+cls.REGISTER[str(command[1])]) | 0x0010

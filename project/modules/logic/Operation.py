@@ -24,11 +24,11 @@ class Operation(object):
         'XOR':  (0x2300, 'reg', 'reg'),
         'NOT':  (0x2400, 'reg'),
 
-        'LT':   (0x3100, 'reg', 'val'),
-        'GT':   (0x3200, 'reg', 'val'),
-        'LE':   (0x3300, 'reg', 'val'),
-        'GE':   (0x3400, 'reg', 'val'),
-        'EQ':   (0x3500, 'reg', 'val'),
+        'LT':   (0x3100, 'reg', 'reg'),
+        'GT':   (0x3200, 'reg', 'reg'),
+        'LE':   (0x3300, 'reg', 'reg'),
+        'GE':   (0x3400, 'reg', 'reg'),
+        'EQ':   (0x3500, 'reg', 'reg'),
         'EZ':   (0x3600, 'reg'),
         'NZ':   (0x3700, 'reg'),
 

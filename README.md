@@ -66,6 +66,8 @@ Afin d'exécuter les programmes `.tpc` *(TeamPouleCompilé)*, vous devez instanc
 
             - `Virtual Machine` : Machine virtuelle pouvant exécuter du code compilé
 
+    - `examples` : Ressources d'exemples, avec les sources (`.tps`) et le fichier compilé (`.tpc`)
+
     - `tests` : Les différents tests, organisés selon la même architecture qu'au sein du dossier `modules`
 
 ## _#**Tests**_:

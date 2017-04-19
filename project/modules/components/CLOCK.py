@@ -17,14 +17,9 @@ class CLOCK(IComponent):
 
         self.KILL = Event()
         self.THREAD = None
-        self.ON_KILL = lambda: None
 
     def setTickInterval(self, tick_interval): # Should not be < 0 huehuehue
         self.TICK_INTERVAL = max(tick_interval, 0.001)
-        return self
-
-    def setKillCallback(self, callback):
-        self.ON_KILL = callback
         return self
 
     def tick(self):
@@ -56,9 +51,6 @@ class CLOCK(IComponent):
         self.KILL.clear()
         self.TICKING = False
         self.THREAD = None
-
-        # We are getting out, time to callback !
-        self.ON_KILL()
         return
 
     def run(self):

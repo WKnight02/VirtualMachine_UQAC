@@ -61,7 +61,7 @@ class ControllerInterface(tk.Frame):
 
 		# Only setting from refresh
 		interval = self.DelayScale.get()
-		self.vm.clock.TICK_INTERVAL = interval
+		self.vm.clock.setTickInterval(interval)
 
 		# Retrieve the Program Counter
 		currentPC = 'PC: 0x%04X' % self.vm.cpu.PC

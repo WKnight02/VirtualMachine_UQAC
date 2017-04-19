@@ -68,7 +68,7 @@ class VirtualMachine(object):
 
         # Setting up the terminal
         def onClose(*args):
-            self.clock.kill()
+            self.clock.kill(True)
             root.destroy()
         root.protocol('WM_DELETE_WINDOW', onClose)
         root.bind('<Escape>', onClose)
@@ -86,12 +86,12 @@ class VirtualMachine(object):
         controllerUI.pack(fill=tk.BOTH)
         controllerUI.refresh()
 
-        # Assigning the refresh method to the UI/CLOCK
-        def tickCallback(): # Could crash on window closing...
+        def refreshLoop():
             try: controllerUI.refresh()
             except: pass
-        self.clock.setTickCallback(tickCallback)
-        
+            root.after(10, refreshLoop)
+        refreshLoop()
+
         return root
 
     def loadProgram(self, integers, **kargs):

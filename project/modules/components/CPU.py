@@ -196,6 +196,9 @@ class CPU(IComponent):
                 overflow, cleanValue = int16.Overflow(value)
                 self.setStateBit(self.STATE_CARRY, int(overflow))
 
+                # Check for zero
+                self.setStateBit(self.STATE_ZERO, int(cleanValue == 0))
+
                 # Check for parity
                 parity = int16.BitGet(cleanValue, 0)
                 self.setStateBit(self.STATE_PARITY, parity)

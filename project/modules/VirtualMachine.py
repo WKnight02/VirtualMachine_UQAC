@@ -68,8 +68,12 @@ class VirtualMachine(object):
 
         # Setting up the terminal
         def onClose(*args):
-            self.clock.kill(True)
-            root.destroy()
+            def wtf():
+                """For some reason, this fixes a bug when closing the window..."""
+                self.clock.kill(True)
+                root.destroy()
+            thread = Thread(target=wtf)
+            thread.start()
         root.protocol('WM_DELETE_WINDOW', onClose)
         root.bind('<Escape>', onClose)
 

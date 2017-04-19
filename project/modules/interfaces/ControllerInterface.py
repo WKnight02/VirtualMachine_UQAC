@@ -23,7 +23,7 @@ class ControllerInterface(tk.Frame):
 		self.DelayScale = DelayScale = tk.Scale(self, from_=250, to=0, orient=tk.HORIZONTAL)
 		DelayScale.set(5)
 
-		self.LabelPC = LabelPC = tk.Label(self, text='0')
+		self.LabelPC = LabelPC = tk.Label(self, text='0', width=10)
 
 		self.ResetPC = ResetPC = tk.Button(self, text='R', bg='#FAA', fg='#FFF', command=self.onReset)
 		# Packing
@@ -33,9 +33,11 @@ class ControllerInterface(tk.Frame):
 		DelayScale.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 		LabelPC.pack(side=tk.LEFT, fill=tk.Y)
 		ResetPC.pack(side=tk.LEFT, fill=tk.Y)
+
 	def setControlledVM(self, vm):
 		"""Binds VM's components to the controls"""
 		self.vm = vm
+
 	def refresh(self):
 		"""Update everything on the UI"""
 

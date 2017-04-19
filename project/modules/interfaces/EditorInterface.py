@@ -1,3 +1,4 @@
+# -*- coding:utf8 -*-
 """
 The editor's interface
 """
@@ -137,7 +138,7 @@ class EditorInterface(tk.Tk):
 			filename = filedialog.asksaveasfilename(**options)
 
 			if filename:
-				self.ShowResultCompile("Compilation reussi avec succes")
+				self.ShowResultCompile("Compilation reussie avec succès")
 				text = open(filename, 'w')
 				text.write(compiled)
 				text.close()

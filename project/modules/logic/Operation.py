@@ -5,9 +5,9 @@ class CompilationError(Exception): pass
 
 class Operation(object):
 
+	#Definition de toutes les operations
     DEFINED = {
         'DTA':  (0, 'val'),
-
 
         'SET':  (0x0500, 'reg', 'val'),
         'LD':   (0x0600, 'reg', 'spc'),
@@ -41,6 +41,7 @@ class Operation(object):
         'HLT':  (0x0F00,)
     }
 
+	#Definition des registres
     REGISTER = {
         "A": 0x01,
         "B": 0x02,
@@ -60,6 +61,9 @@ class Operation(object):
 
     @classmethod
     def compile(cls, source):
+		"""
+			Compile method for one Line
+		"""
         command = source.split(" ")
         while command.count(''): del command[command.index('')]
         if len(command) != 0:
